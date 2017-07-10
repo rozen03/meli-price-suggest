@@ -30,8 +30,6 @@ type Results struct {
 	filters           []map[string]interface{} `json:"filters"`
 	available_filters []map[string]interface{} `json:"available_filters"`
 }
-type Storage struct {
-}
 
 func Categorias() []string {
 	url := "https://api.mercadolibre.com/sites/MLA/categories"
