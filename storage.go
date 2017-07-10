@@ -33,8 +33,55 @@ type Results struct {
 type Storage struct {
 }
 
+func Categorias() []string {
+	url := "https://api.mercadolibre.com/sites/MLA/categories"
+	resp, err := http.Get(url)
+	if err != nil {
+		panic("Explotur")
+	}
+	defer resp.Body.Close()
+	var body []map[string]interface{}
+	err = json.NewDecoder(resp.Body).Decode(&body)
+	if err != nil {
+		panic("at the dis...")
+	}
+
+	results := body[0]
+	fmt.Println(results)
+
+	return nil
+}
+func Hijos(category string) []string {
+	url := "https://api.mercadolibre.com/categories/" + category
+	resp, err := http.Get(url)
+	if err != nil {
+		panic("Explotur")
+	}
+	defer resp.Body.Close()
+	var body map[string]interface{}
+	err = json.NewDecoder(resp.Body).Decode(&body)
+	if err != nil {
+		panic("at the dis...")
+	}
+
+	results := body["children_categories"].([]interface{})
+	total := body["total_items_in_this_category"].(float64)
+	// var res []interface{}
+	res := make([]string, len(results))
+	var totales float64
+	for i := range results {
+		resi := results[i].(map[string]interface{})
+		res[i] = resi["id"].(string)
+		totales += resi["total_items_in_this_category"].(float64)
+	}
+	// fmt.Println(res)
+	fmt.Println(totales, total, total == totales)
+
+	return res
+}
 func Contador(category string) int {
-	url := "https://api.mercadolibre.com/sites/MLA/search?category=MLA5726&offset=50&limit=50"
+	// url := "https://api.mercadolibre.com/sites/MLA/search?category=MLA5726&offset=50&limit=50"
+	url := "https://api.mercadolibre.com/sites/MLA/search?category=" + category
 	resp, err := http.Get(url)
 	if err != nil {
 		panic("Explotur")
