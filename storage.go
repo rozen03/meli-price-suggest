@@ -34,6 +34,7 @@ func Categorias() []string {
 	var body []map[string]interface{}
 	err = json.NewDecoder(resp.Body).Decode(&body)
 	if err != nil {
+		fmt.Println(resp.Body)
 		panic("at the dis...")
 	}
 
