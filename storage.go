@@ -131,6 +131,14 @@ func brezolver(res obtainedData, resi obtainedData) obtainedData {
 	res.min = math.Max(res.min, resi.min)
 	return res
 }
+func all(respuestas []bool) bool {
+	for b := range respuestas {
+		if !respuestas[b] {
+			return false
+		}
+	}
+	return true
+}
 func PreciosYVentas(category string) obtainedData {
 	url := "https://api.mercadolibre.com/sites/MLA/search?limit=200&category=" + category
 	resp, err := http.Get(url)
@@ -149,7 +157,7 @@ func PreciosYVentas(category string) obtainedData {
 	// fmt.Println(total, reflect.TypeOf(total))
 	res := GetPreciosYVentas(results)
 	resp.Body.Close()
-	chanels := (total / 200.0) + 1
+	chanels := 20
 	// for i := 200; i < total; i += 200 * (chanels) {
 	channs := make([]chan obtainedData, chanels)
 	for c := range channs {
@@ -157,13 +165,21 @@ func PreciosYVentas(category string) obtainedData {
 		go GetALLLLL(category, 200*c, channs[c])
 	}
 	// for i := 200; i < chanels; i += 200 {
-	chans := 0
-	for chans < chanels {
+	chans := chanels * 200
+	respondio := make([]bool, chanels)
+	for chans < total || all(respondio) {
 		for c := range channs {
 			select {
 			case resi := <-channs[c]:
 				res = brezolver(res, resi)
-				chans++
+				chans += 200
+				if chans < total {
+					go GetALLLLL(category, chans, channs[c])
+					respondio[c] = false
+				} else {
+					respondio[c] = true
+
+				}
 			default:
 				continue
 			}
