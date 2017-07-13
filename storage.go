@@ -101,7 +101,14 @@ func GetALLLLL(category string, offset int, c chan obtainedData) {
 	// fmt.Println(url)
 	resp, err := http.Get(url)
 	if err != nil {
-		panic("Explotur")
+		for i := 0; i < 5 && err != nil; i++ {
+			fmt.Println(err)
+			resp, err = http.Get(url)
+		}
+
+		if err != nil {
+			panic("Explotur")
+		}
 	}
 	var body map[string]interface{}
 
