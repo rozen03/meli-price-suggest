@@ -103,7 +103,6 @@ func GetALLLLL(category string, offset int, c chan obtainedData) {
 	if err != nil {
 		for i := 0; i < 5 && err != nil; i++ {
 			fmt.Println(err)
-			fmt.Println("Elol code", resp.StatusCode)
 			resp, err = http.Get(url)
 		}
 
@@ -118,8 +117,9 @@ func GetALLLLL(category string, offset int, c chan obtainedData) {
 		fmt.Println(resp.Body)
 		panic("at the dis...")
 	}
-	defer resp.Body.Close()
+
 	results := body["results"].([]interface{})
+	resp.Body.Close()
 	// total := body["paging"].(map[string]interface{})["total"].(float64)
 	// fmt.Println(total, reflect.TypeOf(total))
 	c <- GetPreciosYVentas(results)
@@ -166,30 +166,9 @@ func PreciosYVentas(category string) obtainedData {
 				chans++
 			default:
 				continue
-				// case resi := <-channs[1]:
-				// res = brezolver(res, resi)
-				// case resi := <-channs[2]:
-				// res = brezolver(res, resi)
-				// case resi := <-channs[3]:
-				// brezolver(res, resi)
-				// case resi := <-channs[4]:
-				// brezolver(res, resi)
-				// case resi := <-channs[5]:
-				// brezolver(res, resi)
-				// case resi := <-channs[6]:
-				// brezolver(res, resi)
-				// case resi := <-channs[7]:
-				// brezolver(res, resi)
-				// case resi := <-channs[8]:
-				// brezolver(res, resi)
-				// case resi := <-channs[9]:
-				// brezolver(res, resi)
-				// }
 			}
 		}
 
-		// brezolver(res, resi)
-		// fmt.Println(res)
 	}
 	// }
 	return res
