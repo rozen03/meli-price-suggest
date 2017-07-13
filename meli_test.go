@@ -3,26 +3,40 @@ package main
 import (
 	// "encoding/json"
 	// "fmt"
-	"testing"
 	"reflect"
+	"testing"
 	// "math/rand"
 	// "time"
 )
-func TestMeli001(t *testing.T){
-	if testing.Short() {
-        t.Skip("skipping test in short mode.")
-    }
 
-}
-func Test002(t *testing.T){
+func TestMeli(t *testing.T) {
 	if testing.Short() {
-        t.Skip("skipping test in short mode.")
-    }
-	id :="MLA5725"
-	var cosos =[]string {"MLA4711", "MLA6520", "MLA6070", "MLA86360", "MLA3381", "MLA4610", "MLA2227", "MLA86838", "MLA6537","MLA8531", "MLA400928", "MLA1747", "MLA1771", "MLA86080", "MLA377674", "MLA4589", "MLA6177"}
-	hijos := Hijos(id)
-	if !reflect.DeepEqual(cosos,hijos){
-		t.Error(id+" childs have changed or there's an error getting it's childs")
+		t.Skip("Skipping test in short mode.")
 	}
 
+}
+func TestCategoryChilds(t *testing.T) {
+	if testing.Short() {
+		t.Skip("Skipping test in short mode.")
+	}
+	id := "MLA5725"
+	var cosos = []string{"MLA4711", "MLA6520", "MLA6070", "MLA86360", "MLA3381", "MLA4610", "MLA2227", "MLA86838", "MLA6537", "MLA8531", "MLA400928", "MLA1747", "MLA1771", "MLA86080", "MLA377674", "MLA4589", "MLA6177"}
+	hijos := Hijos(id)
+	if !reflect.DeepEqual(cosos, hijos) {
+		t.Error(id + " childs have changed or there's an error getting it's childs")
+	}
+
+}
+func TestPairPriceValue(t *testing.T) {
+	if testing.Short() {
+		t.Skip("Skipping test in short mode.")
+	}
+	id := "MLA5725"
+	values := PreciosYVentas(id)
+	t.Error(values)
+}
+func BenchmarkDeLaMuerte(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		Suggest("MLA5725", PreciosYVentas)
+	}
 }
