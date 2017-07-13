@@ -107,6 +107,7 @@ func GetALLLLL(category string, offset int, c chan obtainedData) {
 
 	err = json.NewDecoder(resp.Body).Decode(&body)
 	if err != nil {
+		fmt.Println(resp.Body)
 		panic("at the dis...")
 	}
 	defer resp.Body.Close()
