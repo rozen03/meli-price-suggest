@@ -90,7 +90,7 @@ func GetPreciosYVentas(results []interface{}) obtainedData {
 		max = math.Max(price, max)
 		min = math.Min(price, min)
 		prices += price * (sold + 1)
-		total += sold
+		total += (sold + 1)
 	}
 	// fmt.Println(res)
 	return obtainedData{min, max, prices, total}
