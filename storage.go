@@ -140,48 +140,49 @@ func PreciosYVentas(category string) obtainedData {
 	// fmt.Println(total, reflect.TypeOf(total))
 	res := GetPreciosYVentas(results)
 	resp.Body.Close()
-	chanels := 1000
-	for i := 200; i < total; i += 200 * (chanels) {
-		channs := make([]chan obtainedData, chanels)
-		for c := range channs {
-			channs[c] = make(chan obtainedData)
-			go GetALLLLL(category, i+200*c, channs[c])
-		}
-		chans := 0
-		for chans < chanels {
-			for c := range channs {
-				select {
-				case resi := <-channs[c]:
-					res = brezolver(res, resi)
-					chans++
-				default:
-					continue
-					// case resi := <-channs[1]:
-					// res = brezolver(res, resi)
-					// case resi := <-channs[2]:
-					// res = brezolver(res, resi)
-					// case resi := <-channs[3]:
-					// brezolver(res, resi)
-					// case resi := <-channs[4]:
-					// brezolver(res, resi)
-					// case resi := <-channs[5]:
-					// brezolver(res, resi)
-					// case resi := <-channs[6]:
-					// brezolver(res, resi)
-					// case resi := <-channs[7]:
-					// brezolver(res, resi)
-					// case resi := <-channs[8]:
-					// brezolver(res, resi)
-					// case resi := <-channs[9]:
-					// brezolver(res, resi)
-					// }
-				}
-			}
-
-			// brezolver(res, resi)
-			// fmt.Println(res)
-		}
+	chanels := total / 200.0
+	// for i := 200; i < total; i += 200 * (chanels) {
+	channs := make([]chan obtainedData, chanels)
+	for c := range channs {
+		channs[c] = make(chan obtainedData)
+		go GetALLLLL(category, 200*c, channs[c])
 	}
+	// for i := 200; i < chanels; i += 200 {
+	chans := 0
+	for chans < chanels {
+		for c := range channs {
+			select {
+			case resi := <-channs[c]:
+				res = brezolver(res, resi)
+				chans++
+			default:
+				continue
+				// case resi := <-channs[1]:
+				// res = brezolver(res, resi)
+				// case resi := <-channs[2]:
+				// res = brezolver(res, resi)
+				// case resi := <-channs[3]:
+				// brezolver(res, resi)
+				// case resi := <-channs[4]:
+				// brezolver(res, resi)
+				// case resi := <-channs[5]:
+				// brezolver(res, resi)
+				// case resi := <-channs[6]:
+				// brezolver(res, resi)
+				// case resi := <-channs[7]:
+				// brezolver(res, resi)
+				// case resi := <-channs[8]:
+				// brezolver(res, resi)
+				// case resi := <-channs[9]:
+				// brezolver(res, resi)
+				// }
+			}
+		}
+
+		// brezolver(res, resi)
+		// fmt.Println(res)
+	}
+	// }
 	return res
 }
 
