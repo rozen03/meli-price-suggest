@@ -17,6 +17,13 @@ import (
 // "fmt"
 //"errors"
 
+type obtainedData struct {
+	min   float64
+	max   float64
+	sum   float64
+	total float64
+}
+
 func Categorias() []string {
 	url := "https://api.mercadolibre.com/sites/MLA/categories"
 	resp, err := http.Get(url)
@@ -64,13 +71,6 @@ func Hijos(category string) []string {
 	return res
 }
 
-type obtainedData struct {
-	min   float64
-	max   float64
-	sum   float64
-	total float64
-}
-
 func GetPreciosYVentas(results []interface{}) obtainedData {
 	prices := 0.0
 	total := 0.0
@@ -88,14 +88,14 @@ func GetPreciosYVentas(results []interface{}) obtainedData {
 		}
 		max = math.Max(price, max)
 		min = math.Min(price, min)
-		price += price * (sold + 1)
+		prices += price * (sold + 1)
 		total += sold
 	}
 	// fmt.Println(res)
 	return obtainedData{min, max, prices, total}
 
 }
-func GetALLLLL(category string, offset int) obtainedData {
+func GetALLLLL(category string, offset int, c chan obtainedData) {
 	url := "https://api.mercadolibre.com/sites/MLA/search?limit=200&category=" + category + "&offset=" + strconv.Itoa(offset)
 	// fmt.Println(url)
 	resp, err := http.Get(url)
@@ -112,7 +112,14 @@ func GetALLLLL(category string, offset int) obtainedData {
 	results := body["results"].([]interface{})
 	// total := body["paging"].(map[string]interface{})["total"].(float64)
 	// fmt.Println(total, reflect.TypeOf(total))
-	return GetPreciosYVentas(results)
+	c <- GetPreciosYVentas(results)
+}
+func brezolver(res obtainedData, resi obtainedData) obtainedData {
+	res.sum += resi.sum
+	res.total += resi.total
+	res.max = math.Max(res.max, resi.max)
+	res.min = math.Max(res.min, resi.min)
+	return res
 }
 func PreciosYVentas(category string) obtainedData {
 	url := "https://api.mercadolibre.com/sites/MLA/search?limit=200&category=" + category
@@ -132,12 +139,20 @@ func PreciosYVentas(category string) obtainedData {
 	// fmt.Println(total, reflect.TypeOf(total))
 	res := GetPreciosYVentas(results)
 	resp.Body.Close()
-	for i := 200; i < total; i += 200 {
-		resi := GetALLLLL(category, i)
-		res.sum += resi.sum
-		res.total += resi.total
-		res.max = math.Max(res.max, resi.max)
-		res.min = math.Max(res.min, resi.min)
+	for i := 200; i < total; i += 400 {
+		c1 := make(chan obtainedData)
+		c2 := make(chan obtainedData)
+		go GetALLLLL(category, i, c1)
+		go GetALLLLL(category, i+200, c2)
+		select {
+		case resi := <-c1:
+			brezolver(res, resi)
+		case resi := <-c2:
+			brezolver(res, resi)
+		}
+
+		// brezolver(res, resi)
+		fmt.Println(res)
 	}
 	return res
 }
