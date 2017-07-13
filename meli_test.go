@@ -27,14 +27,15 @@ func TestCategoryChilds(t *testing.T) {
 	}
 
 }
-func TestPairPriceValue(t *testing.T) {
-	if testing.Short() {
-		t.Skip("Skipping test in short mode.")
-	}
-	id := "MLA5725"
-	values := PreciosYVentas(id)
-	t.Error(values)
-}
+
+// func TestPairPriceValue(t *testing.T) {
+// if testing.Short() {
+// t.Skip("Skipping test in short mode.")
+// }
+// id := "MLA5725"
+// values := PreciosYVentas(id)
+// t.Error(values)
+// }
 func BenchmarkDeLaMuerte(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		Suggest("MLA5725", PreciosYVentas)
