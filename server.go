@@ -21,5 +21,5 @@ func start() {
 	r := gin.Default()
 	r.GET("/ping", ping)
 	r.GET("/categories/:id/prices", prices)
-	r.Run(":80") // listen and server on 0.0.0.0:80
+	r.Run(":8081") // listen and server on 0.0.0.0:8081
 }
