@@ -152,7 +152,7 @@ func PreciosYVentas(category string) obtainedData {
 		}
 
 		// brezolver(res, resi)
-		fmt.Println(res)
+		// fmt.Println(res)
 	}
 	return res
 }
