@@ -150,17 +150,19 @@ func PreciosYVentas(category string) obtainedData {
 		go GetALLLLL(category, i+400, c3)
 		go GetALLLLL(category, i+600, c4)
 		go GetALLLLL(category, i+800, c5)
-		select {
-		case resi := <-c1:
-			brezolver(res, resi)
-		case resi := <-c2:
-			brezolver(res, resi)
-		case resi := <-c3:
-			brezolver(res, resi)
-		case resi := <-c4:
-			brezolver(res, resi)
-		case resi := <-c5:
-			brezolver(res, resi)
+		for chans := 0; chans < 5; chans++ {
+			select {
+			case resi := <-c1:
+				brezolver(res, resi)
+			case resi := <-c2:
+				brezolver(res, resi)
+			case resi := <-c3:
+				brezolver(res, resi)
+			case resi := <-c4:
+				brezolver(res, resi)
+			case resi := <-c5:
+				brezolver(res, resi)
+			}
 		}
 
 		// brezolver(res, resi)
