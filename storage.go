@@ -103,6 +103,7 @@ func GetALLLLL(category string, offset int, c chan obtainedData) {
 	if err != nil {
 		for i := 0; i < 5 && err != nil; i++ {
 			fmt.Println(err)
+			fmt.Println("Elol code", resp.StatusCode)
 			resp, err = http.Get(url)
 		}
 
