@@ -142,12 +142,21 @@ func PreciosYVentas(category string) obtainedData {
 	for i := 200; i < total; i += 400 {
 		c1 := make(chan obtainedData)
 		c2 := make(chan obtainedData)
+		c3 := make(chan obtainedData)
+		c4 := make(chan obtainedData)
+		c5 := make(chan obtainedData)
 		go GetALLLLL(category, i, c1)
 		go GetALLLLL(category, i+200, c2)
 		select {
 		case resi := <-c1:
 			brezolver(res, resi)
 		case resi := <-c2:
+			brezolver(res, resi)
+		case resi := <-c3:
+			brezolver(res, resi)
+		case resi := <-c4:
+			brezolver(res, resi)
+		case resi := <-c5:
 			brezolver(res, resi)
 		}
 
