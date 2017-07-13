@@ -139,29 +139,30 @@ func PreciosYVentas(category string) obtainedData {
 	// fmt.Println(total, reflect.TypeOf(total))
 	res := GetPreciosYVentas(results)
 	resp.Body.Close()
-	for i := 200; i < total; i += 1000 {
+	chanels := 3
+	for i := 200; i < total; i += 200 * (chanels) {
 		c1 := make(chan obtainedData)
 		c2 := make(chan obtainedData)
 		c3 := make(chan obtainedData)
-		c4 := make(chan obtainedData)
-		c5 := make(chan obtainedData)
+		// c4 := make(chan obtainedData)
+		// c5 := make(chan obtainedData)
 		go GetALLLLL(category, i, c1)
 		go GetALLLLL(category, i+200, c2)
 		go GetALLLLL(category, i+400, c3)
-		go GetALLLLL(category, i+600, c4)
-		go GetALLLLL(category, i+800, c5)
-		for chans := 0; chans < 5; chans++ {
+		// go GetALLLLL(category, i+600, c4)
+		// go GetALLLLL(category, i+800, c5)
+		for chans := 0; chans < 3; chans++ {
 			select {
 			case resi := <-c1:
-				brezolver(res, resi)
+				res = brezolver(res, resi)
 			case resi := <-c2:
-				brezolver(res, resi)
+				res = brezolver(res, resi)
 			case resi := <-c3:
-				brezolver(res, resi)
-			case resi := <-c4:
-				brezolver(res, resi)
-			case resi := <-c5:
-				brezolver(res, resi)
+				res = brezolver(res, resi)
+				// case resi := <-c4:
+				// brezolver(res, resi)
+				// case resi := <-c5:
+				// brezolver(res, resi)
 			}
 		}
 
