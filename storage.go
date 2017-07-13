@@ -139,7 +139,7 @@ func PreciosYVentas(category string) obtainedData {
 	// fmt.Println(total, reflect.TypeOf(total))
 	res := GetPreciosYVentas(results)
 	resp.Body.Close()
-	chanels := 10
+	chanels := 20
 	for i := 200; i < total; i += 200 * (chanels) {
 		channs := make([]chan obtainedData, chanels)
 		for c := range channs {
