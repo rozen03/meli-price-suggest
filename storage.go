@@ -157,7 +157,13 @@ func PreciosYVentas(category string) obtainedData {
 	// fmt.Println(total, reflect.TypeOf(total))
 	res := GetPreciosYVentas(results)
 	resp.Body.Close()
-	chanels := 20
+	var chanels int
+	if 20 < total/200 {
+		chanels = 20
+	} else {
+		chanels = total / 200
+	}
+	chanels++
 	// for i := 200; i < total; i += 200 * (chanels) {
 	channs := make([]chan obtainedData, chanels)
 	for c := range channs {
