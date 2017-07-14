@@ -118,8 +118,11 @@ func GetALLLLL(category string, offset int, c chan obtainedData) {
 		panic("at the dis...")
 	}
 
-	results := body["results"].([]interface{})
+	results, ok := body["results"].([]interface{})
 	resp.Body.Close()
+	if !ok {
+		c <- obtainedData{0.0, 0.0, 0.0, 0.0}
+	}
 	// total := body["paging"].(map[string]interface{})["total"].(float64)
 	// fmt.Println(total, reflect.TypeOf(total))
 	c <- GetPreciosYVentas(results)
@@ -157,7 +160,7 @@ func PreciosYVentas(category string) obtainedData {
 	res := GetPreciosYVentas(results)
 	resp.Body.Close()
 	var chanels int
-	maxChanels := 200
+	maxChanels := 100
 	if maxChanels < total/200 {
 		chanels = maxChanels
 	} else {
@@ -171,7 +174,7 @@ func PreciosYVentas(category string) obtainedData {
 		go GetALLLLL(category, 200*c, channs[c])
 	}
 	// for i := 200; i < chanels; i += 200 {
-	chans := chanels * 100
+	chans := chanels * 200
 	respondio := make([]bool, chanels)
 	for chans < total || all(respondio) {
 		for c := range channs {
