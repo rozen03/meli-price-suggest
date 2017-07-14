@@ -158,7 +158,7 @@ func PreciosYVentas(category string) obtainedData {
 	res := GetPreciosYVentas(results)
 	resp.Body.Close()
 	var chanels int
-	maxChanels := 100
+	maxChanels := 200
 	if maxChanels < total/200 {
 		chanels = maxChanels
 	} else {
