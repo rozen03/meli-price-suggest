@@ -28,15 +28,75 @@ func TestCategoryChilds(t *testing.T) {
 
 }
 
-// func TestPairPriceValue(t *testing.T) {
-// if testing.Short() {
-// t.Skip("Skipping test in short mode.")
-// }
-// id := "MLA5725"
-// values := PreciosYVentas(id)
-// t.Error(values)
-// }
-func BenchmarkDeLaMuerte(b *testing.B) {
+// MLA1403
+// MLA1071
+// MLA1367
+// MLA1368
+// MLA1743
+// MLA1384
+// MLA1246
+// MLA1039
+// MLA1051
+// MLA1798
+// MLA1648
+// MLA1144
+// MLA1276
+// MLA5726
+// MLA1000
+// MLA2547
+// MLA407134
+// MLA1574
+// MLA1499
+// MLA1459
+// MLA1182
+
+func BenchmarkMLA1168(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		Suggest("MLA1168", PreciosYVentas)
+	}
+}
+func BenchmarkMLA3025(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		Suggest("MLA3025", PreciosYVentas)
+	}
+}
+func BenchmarkMLA1132(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		Suggest("MLA1132", PreciosYVentas)
+	}
+}
+func BenchmarkMLA3937(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		Suggest("MLA3937", PreciosYVentas)
+	}
+}
+
+func BenchmarkMLA409431(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		Suggest("MLA409431", PreciosYVentas)
+	}
+}
+func Benchmark(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		Suggest("MLA1430", PreciosYVentas)
+	}
+}
+func BenchmarkMLA1540(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		Suggest("MLA1540", PreciosYVentas)
+	}
+}
+func vBenchmark(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		Suggest("", PreciosYVentas)
+	}
+}
+func BenchmarkMLA1953(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		Suggest("MLA1953", PreciosYVentas)
+	}
+}
+func Benchmark5725(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		Suggest("MLA5725", PreciosYVentas)
 	}
