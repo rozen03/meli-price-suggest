@@ -172,7 +172,7 @@ func PreciosYVentas(category string) obtainedData {
 		go GetALLLLL(category, 200*c, channs[c])
 	}
 	// for i := 200; i < chanels; i += 200 {
-	chans := chanels * 200
+	chans := chanels * 100
 	respondio := make([]bool, chanels)
 	for chans < total || all(respondio) {
 		for c := range channs {
