@@ -8,15 +8,6 @@ import (
 	"strconv"
 )
 
-//"github.com/nobonobo/unqlitego"
-// "github.com/tpotlog/unqlitego"
-// "github.com/tpotlog/unqlitego/collections"
-//"github.com/nobonobo/unqlitego/collections"
-//"collections"
-
-// "fmt"
-//"errors"
-
 type obtainedData struct {
 	min   float64
 	max   float64
@@ -24,55 +15,31 @@ type obtainedData struct {
 	total float64
 }
 
-func Categorias() []string {
-	url := "https://api.mercadolibre.com/sites/MLA/categories"
+const maxChanels = 63
+const melink = "https://api.mercadolibre.com/sites/MLA/search?limit=200&category="
+
+func download(url string) map[string]interface{} {
 	resp, err := http.Get(url)
 	if err != nil {
-		panic("Explotur")
+		for i := 0; i < 5 && err != nil; i++ {
+			fmt.Println(err)
+			resp, err = http.Get(url)
+		}
+
+		if err != nil {
+			panic("Explotur")
+		}
 	}
-	defer resp.Body.Close()
-	var body []map[string]interface{}
+	var body map[string]interface{}
 	err = json.NewDecoder(resp.Body).Decode(&body)
 	if err != nil {
 		fmt.Println(resp.Body)
 		panic("at the dis...")
 	}
-
-	res := make([]string, len(body))
-	// var totales float64
-	for i := range body {
-		// resi := body[i].(map[string]interface{})
-		res[i] = body[i]["id"].(string)
-		// totales += resi["total_items_in_this_category"].(float64)
-	}
-	return res
+	resp.Body.Close()
+	return body
 }
-func Hijos(category string) []string {
-	url := "https://api.mercadolibre.com/categories/" + category
-	resp, err := http.Get(url)
-	if err != nil {
-		panic("Explotur")
-	}
-	defer resp.Body.Close()
-	var body map[string]interface{}
-	err = json.NewDecoder(resp.Body).Decode(&body)
-	if err != nil {
-		panic("at the dis...")
-	}
-
-	results := body["children_categories"].([]interface{})
-	// total := body["total_items_in_this_category"].(float64)
-	res := make([]string, len(results))
-	// var totales float64
-	for i := range results {
-		resi := results[i].(map[string]interface{})
-		res[i] = resi["id"].(string)
-		// totales += resi["total_items_in_this_category"].(float64)
-	}
-	return res
-}
-
-func GetPreciosYVentas(results []interface{}) obtainedData {
+func GetPricesAndSold(results []interface{}) obtainedData {
 	prices := 0.0
 	total := 0.0
 	max := 0.0
@@ -92,40 +59,17 @@ func GetPreciosYVentas(results []interface{}) obtainedData {
 		prices += price * (sold + 1)
 		total += (sold + 1)
 	}
-	// fmt.Println(res)
 	return obtainedData{min, max, prices, total}
 
 }
-func GetALLLLL(category string, offset int, c chan obtainedData) {
-	url := "https://api.mercadolibre.com/sites/MLA/search?limit=200&category=" + category + "&offset=" + strconv.Itoa(offset)
-	// fmt.Println(url)
-	resp, err := http.Get(url)
-	if err != nil {
-		for i := 0; i < 5 && err != nil; i++ {
-			fmt.Println(err)
-			resp, err = http.Get(url)
-		}
-
-		if err != nil {
-			panic("Explotur")
-		}
-	}
-	var body map[string]interface{}
-
-	err = json.NewDecoder(resp.Body).Decode(&body)
-	if err != nil {
-		fmt.Println(resp.Body)
-		panic("at the dis...")
-	}
-
+func GetALLLLL(url string, c chan obtainedData) {
+	body := download(url)
 	results, ok := body["results"].([]interface{})
-	resp.Body.Close()
 	if !ok {
 		c <- obtainedData{0.0, 0.0, 0.0, 0.0}
 	}
-	// total := body["paging"].(map[string]interface{})["total"].(float64)
-	// fmt.Println(total, reflect.TypeOf(total))
-	c <- GetPreciosYVentas(results)
+
+	c <- GetPricesAndSold(results)
 }
 func brezolver(res *obtainedData, resi *obtainedData) {
 	(*res).sum += (*resi).sum
@@ -141,49 +85,45 @@ func all(respuestas []bool) bool {
 	}
 	return true
 }
-func PreciosYVentas(category string) obtainedData {
-	url := "https://api.mercadolibre.com/sites/MLA/search?limit=200&category=" + category
-	resp, err := http.Get(url)
-	if err != nil {
-		panic("Explotur")
+func GetTotal(body *map[string]interface{}) int {
+	return int((*body)["paging"].(map[string]interface{})["total"].(float64))
+}
+func min(a int, b int) int {
+	if a < b {
+		return a
 	}
-	var body map[string]interface{}
+	return b
+}
 
-	err = json.NewDecoder(resp.Body).Decode(&body)
-	if err != nil {
-		fmt.Println(resp.Body)
-		panic("at the dis...")
-	}
+func PreciosYVentas(category string, ch chan Cosa) obtainedData {
+	url := melink + category
+	body := download(url)
 	results := body["results"].([]interface{})
-	total := int(body["paging"].(map[string]interface{})["total"].(float64))
-	// fmt.Println(total, reflect.TypeOf(total))
-	res := GetPreciosYVentas(results)
-	resp.Body.Close()
-	var chanels int
-	maxChanels := 100
-	if maxChanels < total/200 {
-		chanels = maxChanels
-	} else {
-		chanels = total / 200
-	}
-	chanels++
-	// for i := 200; i < total; i += 200 * (chanels) {
+	total := GetTotal(&body)
+	res := GetPricesAndSold(results)
+	chanels := min(maxChanels, total/200) + 1
 	channs := make([]chan obtainedData, chanels)
+	//Mando la primera tanda a Descargar y calcular
 	for c := range channs {
 		channs[c] = make(chan obtainedData)
-		go GetALLLLL(category, 200*c, channs[c])
+		// go GetALLLLL(melink+category+"&offset="+strconv.Itoa(200*c), channs[c])
+		ch <- Cosa{channs[c], melink + category + "&offset=" + strconv.Itoa(200*c)}
 	}
-	// for i := 200; i < chanels; i += 200 {
-	chans := chanels * 200
+
+	if maxChanels == chanels {
+		return res
+	}
+	done := chanels * 200
 	respondio := make([]bool, chanels)
-	for chans < total || all(respondio) {
+	for done < total || all(respondio) {
 		for c := range channs {
 			select {
 			case resi := <-channs[c]:
 				brezolver(&res, &resi)
-				chans += 200
-				if chans < total {
-					go GetALLLLL(category, chans, channs[c])
+				done += 200
+				if done < total {
+					ch <- Cosa{channs[c], melink + category + "&offset=" + strconv.Itoa(200*c)}
+					// go GetALLLLL(melink+category+"&offset="+strconv.Itoa(done), channs[c])
 					respondio[c] = false
 				} else {
 					respondio[c] = true
@@ -193,9 +133,7 @@ func PreciosYVentas(category string) obtainedData {
 				continue
 			}
 		}
-
 	}
-	// }
 	return res
 }
 
