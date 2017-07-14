@@ -42,19 +42,55 @@ func TestCategoryChilds(t *testing.T) {
 // MLA1144
 // MLA1276
 // MLA5726
-// MLA1000
-// MLA2547
-// MLA407134
-// MLA1574
-// MLA1499
-// MLA1459
-// MLA1182
+
+func BenchmarkMLA1000(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		Suggest("MLA1000", PreciosYVentas)
+	}
+}
+
+func BenchmarkMLA2547(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		Suggest("MLA2547", PreciosYVentas)
+	}
+}
+
+func BenchmarkMLA407134(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		Suggest("MLA407134", PreciosYVentas)
+	}
+}
+
+func BenchmarkMLA1574(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		Suggest("MLA1574", PreciosYVentas)
+	}
+}
+
+func BenchmarkMLA1499(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		Suggest("MLA1499", PreciosYVentas)
+	}
+}
+
+func BenchmarkMLA1459(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		Suggest("MLA1459", PreciosYVentas)
+	}
+}
+
+func BenchmarkMLA1182(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		Suggest("MLA1182", PreciosYVentas)
+	}
+}
 
 func BenchmarkMLA1168(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		Suggest("MLA1168", PreciosYVentas)
 	}
 }
+
 func BenchmarkMLA3025(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		Suggest("MLA3025", PreciosYVentas)
