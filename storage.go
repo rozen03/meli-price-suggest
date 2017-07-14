@@ -125,10 +125,10 @@ func GetALLLLL(category string, offset int, c chan obtainedData) {
 	c <- GetPreciosYVentas(results)
 }
 func brezolver(res *obtainedData, resi *obtainedData) {
-	*res.sum += *resi.sum
-	*res.total += *resi.total
-	*res.max = math.Max(*res.max, *resi.max)
-	*res.min = math.Max(*res.min, *resi.min)
+	(*res).sum += (*resi).sum
+	(*res).total += (*resi).total
+	(*res).max = math.Max((*res).max, (*resi).max)
+	(*res).min = math.Max((*res).min, (*resi).min)
 }
 func all(respuestas []bool) bool {
 	for b := range respuestas {
@@ -177,7 +177,7 @@ func PreciosYVentas(category string) obtainedData {
 		for c := range channs {
 			select {
 			case resi := <-channs[c]:
-				brezolver(*res, resi)
+				brezolver(&res, &resi)
 				chans += 200
 				if chans < total {
 					go GetALLLLL(category, chans, channs[c])
