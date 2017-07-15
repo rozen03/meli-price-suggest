@@ -62,14 +62,14 @@ func GetPricesAndSold(results []interface{}) obtainedData {
 	return obtainedData{min, max, prices, total}
 
 }
-func GetALLLLL(url string, c chan obtainedData) {
+func GetALLLLL(url string, c chan obtainedData, b chan bool) {
 	body := download(url)
 	results, ok := body["results"].([]interface{})
 	if !ok {
 		c <- obtainedData{0.0, 0.0, 0.0, 0.0}
 	}
-
 	c <- GetPricesAndSold(results)
+	b <- true
 }
 func brezolver(res *obtainedData, resi *obtainedData) {
 	(*res).sum += (*resi).sum
