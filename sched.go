@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"meli-price-suggest/fifo"
-	"time"
 )
 
 type Cosa struct {
@@ -56,6 +55,6 @@ func scheduler(ch chan Cosa) {
 			}
 		}
 
-		time.Sleep(time.Second)
+		// time.Sleep(time.Second)
 	}
 }
