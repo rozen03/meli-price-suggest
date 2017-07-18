@@ -8,7 +8,7 @@ type ArgsAndResult struct {
 	download Downloader
 }
 
-const maxChanelsSched = 60
+const maxChanelsSched = 8000
 
 /*
 **A Task Worker is a Goroutine that is listening to a channel waiting for
