@@ -123,11 +123,20 @@ func PreciosYVentas(category string, ch chan ArgsAndResult, download Downloader)
 	responses8 := make(chan obtainedData)
 	responses9 := make(chan obtainedData)
 	responses10 := make(chan obtainedData)
-
+	responses11 := make(chan obtainedData)
+	responses12 := make(chan obtainedData)
+	responses13 := make(chan obtainedData)
+	responses14 := make(chan obtainedData)
+	responses15 := make(chan obtainedData)
+	responses16 := make(chan obtainedData)
+	responses17 := make(chan obtainedData)
+	responses18 := make(chan obtainedData)
+	responses19 := make(chan obtainedData)
+	responses20 := make(chan obtainedData)
 	//Start a Goroutine that would send in order all downloads waiting for any
 	//Task worker free to download
 	go func() {
-		for c := 0; c < chanels; c += 10 {
+		for c := 0; c < chanels; c += 20 {
 			ch <- ArgsAndResult{responses1, category + "&offset=" + strconv.Itoa(200*(c+1)), download}
 			ch <- ArgsAndResult{responses2, category + "&offset=" + strconv.Itoa(200*(c+2)), download}
 			ch <- ArgsAndResult{responses3, category + "&offset=" + strconv.Itoa(200*(c+3)), download}
@@ -138,6 +147,16 @@ func PreciosYVentas(category string, ch chan ArgsAndResult, download Downloader)
 			ch <- ArgsAndResult{responses8, category + "&offset=" + strconv.Itoa(200*(c+8)), download}
 			ch <- ArgsAndResult{responses9, category + "&offset=" + strconv.Itoa(200*(c+9)), download}
 			ch <- ArgsAndResult{responses10, category + "&offset=" + strconv.Itoa(200*(c+10)), download}
+			ch <- ArgsAndResult{responses11, category + "&offset=" + strconv.Itoa(200*(c+11)), download}
+			ch <- ArgsAndResult{responses12, category + "&offset=" + strconv.Itoa(200*(c+12)), download}
+			ch <- ArgsAndResult{responses13, category + "&offset=" + strconv.Itoa(200*(c+13)), download}
+			ch <- ArgsAndResult{responses14, category + "&offset=" + strconv.Itoa(200*(c+14)), download}
+			ch <- ArgsAndResult{responses15, category + "&offset=" + strconv.Itoa(200*(c+15)), download}
+			ch <- ArgsAndResult{responses16, category + "&offset=" + strconv.Itoa(200*(c+16)), download}
+			ch <- ArgsAndResult{responses17, category + "&offset=" + strconv.Itoa(200*(c+17)), download}
+			ch <- ArgsAndResult{responses18, category + "&offset=" + strconv.Itoa(200*(c+18)), download}
+			ch <- ArgsAndResult{responses19, category + "&offset=" + strconv.Itoa(200*(c+19)), download}
+			ch <- ArgsAndResult{responses20, category + "&offset=" + strconv.Itoa(200*(c+20)), download}
 		}
 	}()
 
@@ -178,6 +197,36 @@ func PreciosYVentas(category string, ch chan ArgsAndResult, download Downloader)
 			MergeObainedData(&res, &resi)
 			done++
 		case resi := <-responses10:
+			MergeObainedData(&res, &resi)
+			done++
+		case resi := <-responses11:
+			MergeObainedData(&res, &resi)
+			done++
+		case resi := <-responses12:
+			MergeObainedData(&res, &resi)
+			done++
+		case resi := <-responses13:
+			MergeObainedData(&res, &resi)
+			done++
+		case resi := <-responses14:
+			MergeObainedData(&res, &resi)
+			done++
+		case resi := <-responses15:
+			MergeObainedData(&res, &resi)
+			done++
+		case resi := <-responses16:
+			MergeObainedData(&res, &resi)
+			done++
+		case resi := <-responses17:
+			MergeObainedData(&res, &resi)
+			done++
+		case resi := <-responses18:
+			MergeObainedData(&res, &resi)
+			done++
+		case resi := <-responses19:
+			MergeObainedData(&res, &resi)
+			done++
+		case resi := <-responses20:
 			MergeObainedData(&res, &resi)
 			done++
 		default:
