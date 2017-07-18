@@ -19,22 +19,13 @@ const maxChanelsSched = 64
  */
 
 func taskWorker(ch chan ArgsAndResult, workerId int) {
-	// alpedo := 0
-	// tiempos := 0
 	for true {
 		select {
 		case resi := <-ch:
 			GetObtainedData(resi.args, resi.res, resi.download)
 		default:
-			// alpedo++
 			time.Sleep(time.Second / 10)
 		}
-		// tiempos++
-		// if tiempos > 10000000 {
-		// fmt.Println("soy", workerId, "y estuve al pedo", alpedo, "veces")
-		// tiempos = 0
-		// alpedo = 0
-		// }
 	}
 }
 

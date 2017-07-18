@@ -1,26 +1,24 @@
 package main
 
-import (
-	// "encoding/json"
-	"fmt"
-	"testing"
-	// "reflect"
-	"math/rand"
-	"time"
-)
+import
+// "encoding/json"
 
-func shuffle(slice []int) []int {
-	source := rand.NewSource(time.Now().UnixNano())
-	random := rand.New(source)
-	for i := range slice {
-		j := random.Intn(i + 1)
-		slice[i], slice[j] = slice[j], slice[i]
-	}
-	return slice
-}
-func TestWithOnes(t *testing.T) {
+"testing"
+
+// "reflect"
+
+func TestWithOnes0Sold(t *testing.T) {
 	ch := startWorkers(1000)
-	fmt.Println(Suggest("23123", ch, func(s string) map[string]interface{} { return GenerarUnos(400000.0) }))
+	res := Suggest("23123", ch, func(s string) map[string]interface{} { return GenerarUnos(400000.0) })
+	if res.max != 1.0 {
+		t.Error("Max should be 1 got", res.max)
+	}
+	if res.min != 1.0 {
+		t.Error("Min should be 1 got", res.min)
+	}
+	if res.suggested != 1.0 {
+		t.Error("Suggested should be 1 got", res.suggested)
+	}
 }
 func GenerarUnos(total float64) map[string]interface{} {
 	var prices [200]float64

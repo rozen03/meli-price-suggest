@@ -21,26 +21,3 @@ func MergeObainedData(res *obtainedData, resi *obtainedData) {
 	(*res).max = math.Max((*res).max, (*resi).max)
 	(*res).min = math.Min((*res).min, (*resi).min)
 }
-
-func crecentList(tam int) []int {
-	list := make([]int, tam)
-	for i := 0; i < tam; i++ {
-		list[i] = i
-	}
-	return list
-}
-
-func crecentListt(tam int) []float64 {
-	list := make([]float64, tam)
-	for i := 0; i < tam; i++ {
-		list[i] = float64(i)
-	}
-	return list
-}
-
-func min(a int, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}

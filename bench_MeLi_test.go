@@ -21,13 +21,6 @@ func BenchmarkXxx(b *testing.B) {
 	}
 }
 
-func BenchmarkShuffle(b *testing.B) {
-	list := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
-	for i := 0; i < b.N; i++ {
-		list = shuffle(list)
-	}
-}
-
 func Benchmark10Workers(b *testing.B) {
 	ch := startWorkers(10)
 	for i := 0; i < b.N; i++ {
