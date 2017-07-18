@@ -18,7 +18,7 @@ const maxChanelsSched = 60
 **
  */
 
-func taskWorker(ch chan ArgsAndResult, listenerId int) {
+func taskWorker(ch chan ArgsAndResult, workerId int) {
 	for true {
 		select {
 		case resi := <-ch:

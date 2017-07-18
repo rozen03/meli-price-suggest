@@ -73,6 +73,36 @@ func Benchmark70Workers(b *testing.B) {
 		Suggest(meliId, ch, Download)
 	}
 }
+func Benchmark100Workers(b *testing.B) {
+	ch := startWorkers(100)
+	for i := 0; i < b.N; i++ {
+		Suggest(meliId, ch, Download)
+	}
+}
+func Benchmark200Workers(b *testing.B) {
+	ch := startWorkers(200)
+	for i := 0; i < b.N; i++ {
+		Suggest(meliId, ch, Download)
+	}
+}
+func Benchmark500Workers(b *testing.B) {
+	ch := startWorkers(500)
+	for i := 0; i < b.N; i++ {
+		Suggest(meliId, ch, Download)
+	}
+}
+func Benchmark1000Workers(b *testing.B) {
+	ch := startWorkers(1000)
+	for i := 0; i < b.N; i++ {
+		Suggest(meliId, ch, Download)
+	}
+}
+func Benchmark2000Workers(b *testing.B) {
+	ch := startWorkers(2000)
+	for i := 0; i < b.N; i++ {
+		Suggest(meliId, ch, Download)
+	}
+}
 func shuffle(slice []int) []int {
 	source := rand.NewSource(time.Now().UnixNano())
 	random := rand.New(source)
@@ -82,7 +112,7 @@ func shuffle(slice []int) []int {
 	}
 	return slice
 }
-func TestCosa(t *testing.T) {
+func TestWithOnes(t *testing.T) {
 	ch := startWorkers(1000)
 	fmt.Println(Suggest("23123", ch, GenerarUnos))
 
