@@ -21,7 +21,7 @@ func prices(c *gin.Context, ch chan ArgsAndResult) {
 	})
 }
 func start() {
-	ch, _ := startWorkers(maxChanelsSched)
+	ch := startWorkers(maxChanelsSched)
 	r := gin.Default()
 	r.GET("/ping", ping)
 	r.GET("/categories/:id/prices", func(c *gin.Context) { prices(c, ch) })
