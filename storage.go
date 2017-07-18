@@ -138,30 +138,31 @@ func PreciosYVentas(category string, ch chan ArgsAndResult, download Downloader)
 	responses18 := make(chan obtainedData)
 	responses19 := make(chan obtainedData)
 	responses20 := make(chan obtainedData)
-	responses21 := make(chan obtainedData)
-	responses22 := make(chan obtainedData)
-	responses23 := make(chan obtainedData)
-	responses24 := make(chan obtainedData)
-	responses25 := make(chan obtainedData)
-	responses26 := make(chan obtainedData)
-	responses27 := make(chan obtainedData)
-	responses28 := make(chan obtainedData)
-	responses29 := make(chan obtainedData)
-	responses30 := make(chan obtainedData)
-	responses31 := make(chan obtainedData)
-	responses32 := make(chan obtainedData)
-	responses33 := make(chan obtainedData)
-	responses34 := make(chan obtainedData)
-	responses35 := make(chan obtainedData)
-	responses36 := make(chan obtainedData)
-	responses37 := make(chan obtainedData)
-	responses38 := make(chan obtainedData)
-	responses39 := make(chan obtainedData)
-	responses40 := make(chan obtainedData)
+	// responses21 := make(chan obtainedData)
+	// responses22 := make(chan obtainedData)
+	// responses23 := make(chan obtainedData)
+	// responses24 := make(chan obtainedData)
+	// responses25 := make(chan obtainedData)
+	// responses26 := make(chan obtainedData)
+	// responses27 := make(chan obtainedData)
+	// responses28 := make(chan obtainedData)
+	// responses29 := make(chan obtainedData)
+	// responses30 := make(chan obtainedData)
+	// responses31 := make(chan obtainedData)
+	// responses32 := make(chan obtainedData)
+	// responses33 := make(chan obtainedData)
+	// responses34 := make(chan obtainedData)
+	// responses35 := make(chan obtainedData)
+	// responses36 := make(chan obtainedData)
+	// responses37 := make(chan obtainedData)
+	// responses38 := make(chan obtainedData)
+	// responses39 := make(chan obtainedData)
+	// responses40 := make(chan obtainedData)
 	//Start a Goroutine that would send in order all downloads waiting for any
 	//Task worker free to download
 	go func() {
-		for c := 0; c < chanels; c += 40 {
+		// for c := 0; c < chanels; c += 40 {
+		for c := 0; c < chanels; c += 20 {
 			ch <- ArgsAndResult{responses1, category + "&offset=" + strconv.Itoa(200*(c+1)), download}
 			ch <- ArgsAndResult{responses2, category + "&offset=" + strconv.Itoa(200*(c+2)), download}
 			ch <- ArgsAndResult{responses3, category + "&offset=" + strconv.Itoa(200*(c+3)), download}
@@ -182,26 +183,26 @@ func PreciosYVentas(category string, ch chan ArgsAndResult, download Downloader)
 			ch <- ArgsAndResult{responses18, category + "&offset=" + strconv.Itoa(200*(c+18)), download}
 			ch <- ArgsAndResult{responses19, category + "&offset=" + strconv.Itoa(200*(c+19)), download}
 			ch <- ArgsAndResult{responses20, category + "&offset=" + strconv.Itoa(200*(c+20)), download}
-			ch <- ArgsAndResult{responses21, category + "&offset=" + strconv.Itoa(200*(c+21)), download}
-			ch <- ArgsAndResult{responses22, category + "&offset=" + strconv.Itoa(200*(c+22)), download}
-			ch <- ArgsAndResult{responses23, category + "&offset=" + strconv.Itoa(200*(c+23)), download}
-			ch <- ArgsAndResult{responses24, category + "&offset=" + strconv.Itoa(200*(c+24)), download}
-			ch <- ArgsAndResult{responses25, category + "&offset=" + strconv.Itoa(200*(c+25)), download}
-			ch <- ArgsAndResult{responses26, category + "&offset=" + strconv.Itoa(200*(c+26)), download}
-			ch <- ArgsAndResult{responses27, category + "&offset=" + strconv.Itoa(200*(c+27)), download}
-			ch <- ArgsAndResult{responses28, category + "&offset=" + strconv.Itoa(200*(c+28)), download}
-			ch <- ArgsAndResult{responses29, category + "&offset=" + strconv.Itoa(200*(c+29)), download}
-			ch <- ArgsAndResult{responses30, category + "&offset=" + strconv.Itoa(200*(c+30)), download}
-			ch <- ArgsAndResult{responses31, category + "&offset=" + strconv.Itoa(200*(c+31)), download}
-			ch <- ArgsAndResult{responses32, category + "&offset=" + strconv.Itoa(200*(c+32)), download}
-			ch <- ArgsAndResult{responses33, category + "&offset=" + strconv.Itoa(200*(c+33)), download}
-			ch <- ArgsAndResult{responses34, category + "&offset=" + strconv.Itoa(200*(c+34)), download}
-			ch <- ArgsAndResult{responses35, category + "&offset=" + strconv.Itoa(200*(c+35)), download}
-			ch <- ArgsAndResult{responses36, category + "&offset=" + strconv.Itoa(200*(c+36)), download}
-			ch <- ArgsAndResult{responses37, category + "&offset=" + strconv.Itoa(200*(c+37)), download}
-			ch <- ArgsAndResult{responses38, category + "&offset=" + strconv.Itoa(200*(c+38)), download}
-			ch <- ArgsAndResult{responses39, category + "&offset=" + strconv.Itoa(200*(c+39)), download}
-			ch <- ArgsAndResult{responses40, category + "&offset=" + strconv.Itoa(200*(c+40)), download}
+			// ch <- ArgsAndResult{responses21, category + "&offset=" + strconv.Itoa(200*(c+21)), download}
+			// ch <- ArgsAndResult{responses22, category + "&offset=" + strconv.Itoa(200*(c+22)), download}
+			// ch <- ArgsAndResult{responses23, category + "&offset=" + strconv.Itoa(200*(c+23)), download}
+			// ch <- ArgsAndResult{responses24, category + "&offset=" + strconv.Itoa(200*(c+24)), download}
+			// ch <- ArgsAndResult{responses25, category + "&offset=" + strconv.Itoa(200*(c+25)), download}
+			// ch <- ArgsAndResult{responses26, category + "&offset=" + strconv.Itoa(200*(c+26)), download}
+			// ch <- ArgsAndResult{responses27, category + "&offset=" + strconv.Itoa(200*(c+27)), download}
+			// ch <- ArgsAndResult{responses28, category + "&offset=" + strconv.Itoa(200*(c+28)), download}
+			// ch <- ArgsAndResult{responses29, category + "&offset=" + strconv.Itoa(200*(c+29)), download}
+			// ch <- ArgsAndResult{responses30, category + "&offset=" + strconv.Itoa(200*(c+30)), download}
+			// ch <- ArgsAndResult{responses31, category + "&offset=" + strconv.Itoa(200*(c+31)), download}
+			// ch <- ArgsAndResult{responses32, category + "&offset=" + strconv.Itoa(200*(c+32)), download}
+			// ch <- ArgsAndResult{responses33, category + "&offset=" + strconv.Itoa(200*(c+33)), download}
+			// ch <- ArgsAndResult{responses34, category + "&offset=" + strconv.Itoa(200*(c+34)), download}
+			// ch <- ArgsAndResult{responses35, category + "&offset=" + strconv.Itoa(200*(c+35)), download}
+			// ch <- ArgsAndResult{responses36, category + "&offset=" + strconv.Itoa(200*(c+36)), download}
+			// ch <- ArgsAndResult{responses37, category + "&offset=" + strconv.Itoa(200*(c+37)), download}
+			// ch <- ArgsAndResult{responses38, category + "&offset=" + strconv.Itoa(200*(c+38)), download}
+			// ch <- ArgsAndResult{responses39, category + "&offset=" + strconv.Itoa(200*(c+39)), download}
+			// ch <- ArgsAndResult{responses40, category + "&offset=" + strconv.Itoa(200*(c+40)), download}
 		}
 	}()
 
@@ -274,66 +275,66 @@ func PreciosYVentas(category string, ch chan ArgsAndResult, download Downloader)
 		case resi := <-responses20:
 			MergeObainedData(&res, &resi)
 			done++
-		case resi := <-responses21:
-			MergeObainedData(&res, &resi)
-			done++
-		case resi := <-responses22:
-			MergeObainedData(&res, &resi)
-			done++
-		case resi := <-responses23:
-			MergeObainedData(&res, &resi)
-			done++
-		case resi := <-responses24:
-			MergeObainedData(&res, &resi)
-			done++
-		case resi := <-responses25:
-			MergeObainedData(&res, &resi)
-			done++
-		case resi := <-responses26:
-			MergeObainedData(&res, &resi)
-			done++
-		case resi := <-responses27:
-			MergeObainedData(&res, &resi)
-			done++
-		case resi := <-responses28:
-			MergeObainedData(&res, &resi)
-			done++
-		case resi := <-responses29:
-			MergeObainedData(&res, &resi)
-			done++
-		case resi := <-responses30:
-			MergeObainedData(&res, &resi)
-			done++
-		case resi := <-responses31:
-			MergeObainedData(&res, &resi)
-			done++
-		case resi := <-responses32:
-			MergeObainedData(&res, &resi)
-			done++
-		case resi := <-responses33:
-			MergeObainedData(&res, &resi)
-			done++
-		case resi := <-responses34:
-			MergeObainedData(&res, &resi)
-			done++
-		case resi := <-responses35:
-			MergeObainedData(&res, &resi)
-			done++
-		case resi := <-responses36:
-			MergeObainedData(&res, &resi)
-			done++
-		case resi := <-responses37:
-			MergeObainedData(&res, &resi)
-			done++
-		case resi := <-responses38:
-			MergeObainedData(&res, &resi)
-			done++
-		case resi := <-responses39:
-			MergeObainedData(&res, &resi)
-			done++
-		case resi := <-responses40:
-			MergeObainedData(&res, &resi)
-			done++
+		// case resi := <-responses21:
+		// MergeObainedData(&res, &resi)
+		// done++
+		// case resi := <-responses22:
+		// MergeObainedData(&res, &resi)
+		// done++
+		// case resi := <-responses23:
+		// MergeObainedData(&res, &resi)
+		// done++
+		// case resi := <-responses24:
+		// MergeObainedData(&res, &resi)
+		// done++
+		// case resi := <-responses25:
+		// MergeObainedData(&res, &resi)
+		// done++
+		// case resi := <-responses26:
+		// MergeObainedData(&res, &resi)
+		// done++
+		// case resi := <-responses27:
+		// MergeObainedData(&res, &resi)
+		// done++
+		// case resi := <-responses28:
+		// MergeObainedData(&res, &resi)
+		// done++
+		// case resi := <-responses29:
+		// MergeObainedData(&res, &resi)
+		// done++
+		// case resi := <-responses30:
+		// MergeObainedData(&res, &resi)
+		// done++
+		// case resi := <-responses31:
+		// MergeObainedData(&res, &resi)
+		// done++
+		// case resi := <-responses32:
+		// MergeObainedData(&res, &resi)
+		// done++
+		// case resi := <-responses33:
+		// MergeObainedData(&res, &resi)
+		// done++
+		// case resi := <-responses34:
+		// MergeObainedData(&res, &resi)
+		// done++
+		// case resi := <-responses35:
+		// MergeObainedData(&res, &resi)
+		// done++
+		// case resi := <-responses36:
+		// MergeObainedData(&res, &resi)
+		// done++
+		// case resi := <-responses37:
+		// MergeObainedData(&res, &resi)
+		// done++
+		// case resi := <-responses38:
+		// MergeObainedData(&res, &resi)
+		// done++
+		// case resi := <-responses39:
+		// MergeObainedData(&res, &resi)
+		// done++
+		// case resi := <-responses40:
+		// MergeObainedData(&res, &resi)
+		// done++
 		default:
 			continue
 		}
