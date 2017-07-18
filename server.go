@@ -1,8 +1,7 @@
 package main
 
 import (
-	"math/rand"
-	"time"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -12,19 +11,17 @@ func ping(c *gin.Context) {
 		"message": "pong",
 	})
 }
-func prices(c *gin.Context, ch chan Cosa) {
+func prices(c *gin.Context, ch chan ArgsAndResult) {
 	id := c.Param("id")
-	res := Suggest(id, func(category string) obtainedData { return PreciosYVentas(category, ch) })
+	res := Suggest(id, ch, Download)
 	c.JSON(200, gin.H{
-		"max":       res.max,
-		"suggested": res.suggested,
-		"min":       res.min,
+		"max":       strconv.FormatFloat(res.max, 'f', 2, 64),
+		"suggested": strconv.FormatFloat(res.suggested, 'f', 2, 64),
+		"min":       strconv.FormatFloat(res.min, 'f', 2, 64),
 	})
 }
 func start() {
-	rand.Seed(time.Now().Unix())
-	ch := make(chan Cosa)
-	go scheduler(ch)
+	ch := startWorkers(maxChanelsSched)
 	r := gin.Default()
 	r.GET("/ping", ping)
 	r.GET("/categories/:id/prices", func(c *gin.Context) { prices(c, ch) })

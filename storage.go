@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"math"
 	"net/http"
 	"strconv"
@@ -15,42 +14,60 @@ type obtainedData struct {
 	total float64
 }
 
-const maxChanels = 63
 const melink = "https://api.mercadolibre.com/sites/MLA/search?limit=200&category="
 
-func download(url string) map[string]interface{} {
-	resp, err := http.Get(url)
+/*
+**Download from MeLi with the arguments recieved.
+**Returns map[string]interface{} parsing with the response from MeLi.
+ */
+func Download(args string) map[string]interface{} {
+	//Download the json object from MeLi
+	resp, err := http.Get(melink + args)
 	if err != nil {
-		for i := 0; i < 5 && err != nil; i++ {
-			fmt.Println(err)
-			resp, err = http.Get(url)
+		//Retry 10 times if error
+		for i := 0; i < 100 && err != nil; i++ {
+			// fmt.Println(err)
+			resp, err = http.Get(melink + args)
+			// time.Sleep(time.Millisecond * 500)
 		}
-
 		if err != nil {
-			panic("Explotur")
+			panic(err)
 		}
 	}
+	defer resp.Body.Close()
+
+	//Decode response ioreader into map[string]interface{}
+	//decode to any struct would likely cause errors
 	var body map[string]interface{}
 	err = json.NewDecoder(resp.Body).Decode(&body)
 	if err != nil {
-		fmt.Println(resp.Body)
-		panic("at the dis...")
+		panic(err)
 	}
-	resp.Body.Close()
+
 	return body
 }
-func GetPricesAndSold(results []interface{}) obtainedData {
+
+/*
+**Get the total count, sum, min and max of all prices.
+ */
+func GetPricesAndSold(items []interface{}) obtainedData {
+	//Initialize return data
 	prices := 0.0
 	total := 0.0
 	max := 0.0
 	min := math.MaxFloat64
-	for i := range results {
-		resi := results[i].(map[string]interface{})
-		price, ok := resi["price"].(float64)
+	/*
+	**Loop over all items recieved
+	**Sum the total and the prices
+	**and evaluate the min and maximum values
+	 */
+	for i := range items {
+		item := items[i].(map[string]interface{})
+		price, ok := item["price"].(float64)
 		if !ok {
 			continue
 		}
-		sold, ok := resi["sold_quantity"].(float64)
+		sold, ok := item["sold_quantity"].(float64)
 		if !ok {
 			continue
 		}
@@ -60,94 +77,93 @@ func GetPricesAndSold(results []interface{}) obtainedData {
 		total += (sold + 1)
 	}
 	return obtainedData{min, max, prices, total}
-
 }
-func GetALLLLL(url string, c chan obtainedData, b chan bool) {
-	body := download(url)
+
+/*
+**Download and returns min, max, total and prices
+**From the recieved arguments
+ */
+func GetObtainedData(args string, c chan obtainedData, download Downloader) {
+	body := download(args)
 	results, ok := body["results"].([]interface{})
 	if !ok {
 		c <- obtainedData{0.0, 0.0, 0.0, 0.0}
 	}
 	c <- GetPricesAndSold(results)
-	b <- true
 }
-func brezolver(res *obtainedData, resi *obtainedData) {
-	(*res).sum += (*resi).sum
-	(*res).total += (*resi).total
-	(*res).max = math.Max((*res).max, (*resi).max)
-	(*res).min = math.Max((*res).min, (*resi).min)
-}
-func all(respuestas []bool) bool {
-	for b := range respuestas {
-		if !respuestas[b] {
-			return false
-		}
-	}
-	return true
-}
-func GetTotal(body *map[string]interface{}) int {
+
+/*
+**Auxiliary method created for aesthetic code purposes
+ */
+func GetTotalCount(body *map[string]interface{}) int {
 	return int((*body)["paging"].(map[string]interface{})["total"].(float64))
 }
-func min(a int, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
 
-func PreciosYVentas(category string, ch chan Cosa) obtainedData {
-	url := melink + category
-	body := download(url)
+/*
+**Send to the channel the arguments to download and process the items
+**and also the channel where the task worker should send the prices
+**processed and loop waiting for all prices while merging the information.
+**Finally when all prices where processed
+**returns the total count, the minimum, the maximum, the sum of all prices
+ */
+func PreciosYVentas(category string, ch chan ArgsAndResult, download Downloader) obtainedData {
+	body := download(category)
 	results := body["results"].([]interface{})
-	total := GetTotal(&body)
+	total := GetTotalCount(&body)
 	res := GetPricesAndSold(results)
-	chanels := min(maxChanels, total/200) + 1
-	channs := make([]chan obtainedData, chanels)
-	//Mando la primera tanda a Descargar y calcular
-	for c := range channs {
-		channs[c] = make(chan obtainedData)
-		// go GetALLLLL(melink+category+"&offset="+strconv.Itoa(200*c), channs[c])
-		ch <- Cosa{channs[c], melink + category + "&offset=" + strconv.Itoa(200*c)}
-	}
+	chanels := (total / 200) - 1
+	// channs := make(map[int]chan obtainedData)
+	responses1 := make(chan obtainedData)
+	responses2 := make(chan obtainedData)
+	responses3 := make(chan obtainedData)
+	responses4 := make(chan obtainedData)
+	responses5 := make(chan obtainedData)
+	responses6 := make(chan obtainedData)
 
-	if maxChanels == chanels {
-		return res
-	}
-	done := chanels * 200
-	respondio := make([]bool, chanels)
-	for done < total || all(respondio) {
-		for c := range channs {
-			select {
-			case resi := <-channs[c]:
-				brezolver(&res, &resi)
-				done += 200
-				if done < total {
-					ch <- Cosa{channs[c], melink + category + "&offset=" + strconv.Itoa(200*c)}
-					// go GetALLLLL(melink+category+"&offset="+strconv.Itoa(done), channs[c])
-					respondio[c] = false
-				} else {
-					respondio[c] = true
-
-				}
-			default:
-				continue
-			}
+	//Start a Goroutine that would send in order all downloads waiting for any
+	//Task worker free to download
+	go func() {
+		for c := 0; c < chanels; c += 4 {
+			ch <- ArgsAndResult{responses1, category + "&offset=" + strconv.Itoa(200*(c+1)), download}
+			ch <- ArgsAndResult{responses2, category + "&offset=" + strconv.Itoa(200*(c+2)), download}
+			ch <- ArgsAndResult{responses3, category + "&offset=" + strconv.Itoa(200*(c+3)), download}
+			ch <- ArgsAndResult{responses4, category + "&offset=" + strconv.Itoa(200*(c+4)), download}
+			ch <- ArgsAndResult{responses5, category + "&offset=" + strconv.Itoa(200*(c+5)), download}
+			ch <- ArgsAndResult{responses6, category + "&offset=" + strconv.Itoa(200*(c+6)), download}
 		}
+	}()
+
+	/*
+	**Wait for all channels to return and merge the prices information
+	**then delete the channel key in the map to reduce the ammount of iterations
+	 */
+	//TODO: Evaluate if it would be better to set a sleeping time
+	//before starting to loop again
+	done := 0
+	for done < chanels {
+		select {
+		case resi := <-responses1:
+			MergeObainedData(&res, &resi)
+			done++
+		case resi := <-responses2:
+			MergeObainedData(&res, &resi)
+			done++
+		case resi := <-responses3:
+			MergeObainedData(&res, &resi)
+			done++
+		case resi := <-responses4:
+			MergeObainedData(&res, &resi)
+			done++
+		case resi := <-responses5:
+			MergeObainedData(&res, &resi)
+			done++
+		case resi := <-responses6:
+			MergeObainedData(&res, &resi)
+			done++
+		default:
+			continue
+		}
+
 	}
 	return res
 }
-
-// func PreciosYVentasPorHijo(category string) obtainedData {
-// hijos := Hijos(category)
-// if len(hijos) > 1 {
-// fmt.Println("Hijos de", category, hijos)
-// var res []item
-// for _, hijo := range hijos {
-// res = append(res, PreciosYVentasPorHijo(hijo)...)
-// }
-// fmt.Println(category, "Longitud:", len(res))
-// return res
-// } else {
-// return PreciosYVentas(category)
-// }
-// }

@@ -1,60 +1,38 @@
 package main
 
-import (
-	"fmt"
-	"meli-price-suggest/fifo"
-)
+import "time"
 
-type Cosa struct {
-	res chan obtainedData
-	url string
+type ArgsAndResult struct {
+	res      chan obtainedData
+	args     string
+	download Downloader
 }
 
-const maxChanelsSched = 300
+const maxChanelsSched = 60
 
-func scheduler(ch chan Cosa) {
-	queue := fifo.NewRingqueue()
-	channs := make([]chan bool, maxChanelsSched)
-	contador := 0
-	for c := range channs {
-		channs[c] = make(chan bool)
-	}
+/*
+**A Task Worker is a Goroutine that is listening to a channel waiting for
+**a new task to do, in this case the Task would be to download, canculate
+**and send to the thread creator of the channel
+**the minimum, maximum, total count and the sum of all proces
+**
+ */
+
+func taskWorker(ch chan ArgsAndResult, listenerId int) {
 	for true {
-		// fmt.Println("Queue", queue)
 		select {
 		case resi := <-ch:
-			fmt.Println("ch", <-ch)
-			queue.Add(resi)
+			GetObtainedData(resi.args, resi.res, resi.download)
 		default:
+			time.Sleep(time.Second / 2)
 		}
-		// fmt.Println(a)
-		for c := range channs {
-			// fmt.Print(c)
-			select {
-			case <-channs[c]:
-
-				if contador < maxChanelsSched {
-					mandar, ok := queue.Remove()
-					//Mando la primera tanda a Descargar y calcular
-					if ok {
-						go GetALLLLL(mandar.(Cosa).url, mandar.(Cosa).res, channs[c])
-						contador += 1
-					}
-				}
-				contador -= 1
-			default:
-				continue
-			}
-		}
-		if contador < maxChanelsSched {
-			mandar, ok := queue.Remove()
-			//Mando la primera tanda a Descargar y calcular
-			if ok {
-				go GetALLLLL(mandar.(Cosa).url, mandar.(Cosa).res, channs[contador])
-				contador += 1
-			}
-		}
-
-		// time.Sleep(time.Second)
 	}
+}
+
+func startWorkers(workers int) chan ArgsAndResult {
+	ch := make(chan ArgsAndResult)
+	for i := 0; i < maxChanelsSched; i++ {
+		go taskWorker(ch, i)
+	}
+	return ch
 }
