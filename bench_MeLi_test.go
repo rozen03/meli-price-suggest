@@ -28,49 +28,47 @@ func BenchmarkShuffle(b *testing.B) {
 	}
 }
 
-//
-// func Benchmark10Workers(b *testing.B) {
-// ch := startWorkers(10)
-// for i := 0; i < b.N; i++ {
-// Suggest(meliId, ch, Download)
-// }
-// }
-// func Benchmark20Workers(b *testing.B) {
-// ch := startWorkers(20)
-// for i := 0; i < b.N; i++ {
-// Suggest(meliId, ch, Download)
-// }
-// }
-// func Benchmark30Workers(b *testing.B) {
-// ch := startWorkers(30)
-// for i := 0; i < b.N; i++ {
-// Suggest(meliId, ch, Download)
-// }
-// }
-// func Benchmark40Workers(b *testing.B) {
-// workers := 40
-// ch, morir := startWorkers(workers)
-// for i := 0; i < b.N; i++ {
-// Suggest(meliId, ch, Download)
-// }
-// matar(morir, workers)
-// }
-// func Benchmark50Workers(b *testing.B) {
-// workers := 50
-// ch := startWorkers(workers)
-// for i := 0; i < b.N; i++ {
-// Suggest(meliId, ch, Download)
-// }
-//
-// }
-// func Benchmark60Workers(b *testing.B) {
-// workers := 60
-// ch := startWorkers(workers)
-// for i := 0; i < b.N; i++ {
-// Suggest(meliId, ch, Download)
-// }
-//
-// }
+func Benchmark10Workers(b *testing.B) {
+	ch := startWorkers(10)
+	for i := 0; i < b.N; i++ {
+		Suggest(meliId, ch, Download)
+	}
+}
+func Benchmark20Workers(b *testing.B) {
+	ch := startWorkers(20)
+	for i := 0; i < b.N; i++ {
+		Suggest(meliId, ch, Download)
+	}
+}
+func Benchmark30Workers(b *testing.B) {
+	ch := startWorkers(30)
+	for i := 0; i < b.N; i++ {
+		Suggest(meliId, ch, Download)
+	}
+}
+func Benchmark40Workers(b *testing.B) {
+	workers := 40
+	ch := startWorkers(workers)
+	for i := 0; i < b.N; i++ {
+		Suggest(meliId, ch, Download)
+	}
+}
+func Benchmark50Workers(b *testing.B) {
+	workers := 50
+	ch := startWorkers(workers)
+	for i := 0; i < b.N; i++ {
+		Suggest(meliId, ch, Download)
+	}
+
+}
+func Benchmark60Workers(b *testing.B) {
+	workers := 60
+	ch := startWorkers(workers)
+	for i := 0; i < b.N; i++ {
+		Suggest(meliId, ch, Download)
+	}
+
+}
 func Benchmark70Workers(b *testing.B) {
 	workers := 70
 	ch := startWorkers(workers)
