@@ -6,10 +6,12 @@ import
 "testing"
 
 // "reflect"
+const limit = 200
 
 func TestWithOnes0Sold(t *testing.T) {
 	ch := startWorkers(1000)
 	res := Suggest("23123", ch, func(s string) map[string]interface{} { return GenerarUnos(400000.0) })
+
 	if res.max != 1.0 {
 		t.Error("Max should be 1 got", res.max)
 	}
@@ -29,11 +31,24 @@ func GenerarUnos(total float64) map[string]interface{} {
 	}
 	return Generar(total, prices, sold)
 }
+func GeneradorCreciente(hasta float64) func(s string) map[string]interface{} {
+	total := hasta * 200
+	contador := 0.0
+	return func(s string) map[string]interface{} {
+		contador++
+		var prices [200]float64
+		var sold [200]float64
+		for i := range prices {
+			prices[i] = 10 + contador
+			sold[i] = contador
+		}
+		return Generar(total, prices, sold)
+	}
+}
 func Generar(total float64, prices [200]float64, sold [200]float64) map[string]interface{} {
 	maa := make(map[string]interface{})
 	paging := make(map[string]interface{})
 	paging["total"] = total
-	limit := 200
 	results := make([]interface{}, limit)
 	for i := 0; i < limit; i++ {
 		results[i] = make(map[string]interface{})
