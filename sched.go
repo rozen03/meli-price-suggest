@@ -31,7 +31,7 @@ func taskWorker(ch chan ArgsAndResult, listenerId int) {
 
 func startWorkers(workers int) chan ArgsAndResult {
 	ch := make(chan ArgsAndResult)
-	for i := 0; i < maxChanelsSched; i++ {
+	for i := 0; i < workers; i++ {
 		go taskWorker(ch, i)
 	}
 	return ch
