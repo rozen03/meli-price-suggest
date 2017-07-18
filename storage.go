@@ -119,17 +119,25 @@ func PreciosYVentas(category string, ch chan ArgsAndResult, download Downloader)
 	responses4 := make(chan obtainedData)
 	responses5 := make(chan obtainedData)
 	responses6 := make(chan obtainedData)
+	responses7 := make(chan obtainedData)
+	responses8 := make(chan obtainedData)
+	responses9 := make(chan obtainedData)
+	responses10 := make(chan obtainedData)
 
 	//Start a Goroutine that would send in order all downloads waiting for any
 	//Task worker free to download
 	go func() {
-		for c := 0; c < chanels; c += 6 {
+		for c := 0; c < chanels; c += 10 {
 			ch <- ArgsAndResult{responses1, category + "&offset=" + strconv.Itoa(200*(c+1)), download}
 			ch <- ArgsAndResult{responses2, category + "&offset=" + strconv.Itoa(200*(c+2)), download}
 			ch <- ArgsAndResult{responses3, category + "&offset=" + strconv.Itoa(200*(c+3)), download}
 			ch <- ArgsAndResult{responses4, category + "&offset=" + strconv.Itoa(200*(c+4)), download}
 			ch <- ArgsAndResult{responses5, category + "&offset=" + strconv.Itoa(200*(c+5)), download}
 			ch <- ArgsAndResult{responses6, category + "&offset=" + strconv.Itoa(200*(c+6)), download}
+			ch <- ArgsAndResult{responses7, category + "&offset=" + strconv.Itoa(200*(c+7)), download}
+			ch <- ArgsAndResult{responses8, category + "&offset=" + strconv.Itoa(200*(c+8)), download}
+			ch <- ArgsAndResult{responses9, category + "&offset=" + strconv.Itoa(200*(c+9)), download}
+			ch <- ArgsAndResult{responses10, category + "&offset=" + strconv.Itoa(200*(c+10)), download}
 		}
 	}()
 
@@ -158,6 +166,18 @@ func PreciosYVentas(category string, ch chan ArgsAndResult, download Downloader)
 			MergeObainedData(&res, &resi)
 			done++
 		case resi := <-responses6:
+			MergeObainedData(&res, &resi)
+			done++
+		case resi := <-responses7:
+			MergeObainedData(&res, &resi)
+			done++
+		case resi := <-responses8:
+			MergeObainedData(&res, &resi)
+			done++
+		case resi := <-responses9:
+			MergeObainedData(&res, &resi)
+			done++
+		case resi := <-responses10:
 			MergeObainedData(&res, &resi)
 			done++
 		default:
