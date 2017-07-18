@@ -50,14 +50,14 @@ func BenchmarkShuffle(b *testing.B) {
 // Suggest(meliId, ch, Download)
 // }
 // }
-func Benchmark40Workers(b *testing.B) {
-	workers := 40
-	ch, morir := startWorkers(workers)
-	for i := 0; i < b.N; i++ {
-		Suggest(meliId, ch, Download)
-	}
-	matar(morir, workers)
-}
+// func Benchmark40Workers(b *testing.B) {
+// workers := 40
+// ch, morir := startWorkers(workers)
+// for i := 0; i < b.N; i++ {
+// Suggest(meliId, ch, Download)
+// }
+// matar(morir, workers)
+// }
 func Benchmark50Workers(b *testing.B) {
 	workers := 50
 	ch, morir := startWorkers(workers)
