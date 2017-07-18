@@ -30,7 +30,7 @@ func taskWorker(ch chan ArgsAndResult, workerId int) {
 			// time.Sleep(time.Second / 2)
 		}
 		tiempos++
-		if tiempos > 60 {
+		if tiempos > 10000 {
 			fmt.Println("soy", workerId, "y estuve al pedo", alpedo, "veces")
 			tiempos = 0
 			alpedo = 0
