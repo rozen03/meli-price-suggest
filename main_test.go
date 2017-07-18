@@ -9,119 +9,6 @@ import (
 	"time"
 )
 
-const meliId = "MLA5726"
-
-func Test001(t *testing.T) {
-	if testing.Short() {
-		t.Skip("skipping test in short mode.")
-	}
-
-}
-
-func BenchmarkXxx(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		fmt.Sprintf("hello")
-	}
-}
-
-func BenchmarkShuffle(b *testing.B) {
-	list := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
-	for i := 0; i < b.N; i++ {
-		list = shuffle(list)
-	}
-}
-
-//
-// func Benchmark10Workers(b *testing.B) {
-// ch := startWorkers(10)
-// for i := 0; i < b.N; i++ {
-// Suggest(meliId, ch, Download)
-// }
-// }
-// func Benchmark20Workers(b *testing.B) {
-// ch := startWorkers(20)
-// for i := 0; i < b.N; i++ {
-// Suggest(meliId, ch, Download)
-// }
-// }
-// func Benchmark30Workers(b *testing.B) {
-// ch := startWorkers(30)
-// for i := 0; i < b.N; i++ {
-// Suggest(meliId, ch, Download)
-// }
-// }
-// func Benchmark40Workers(b *testing.B) {
-// workers := 40
-// ch, morir := startWorkers(workers)
-// for i := 0; i < b.N; i++ {
-// Suggest(meliId, ch, Download)
-// }
-// matar(morir, workers)
-// }
-func Benchmark50Workers(b *testing.B) {
-	workers := 50
-	ch := startWorkers(workers)
-	for i := 0; i < b.N; i++ {
-		Suggest(meliId, ch, Download)
-	}
-
-}
-func Benchmark60Workers(b *testing.B) {
-	workers := 60
-	ch := startWorkers(workers)
-	for i := 0; i < b.N; i++ {
-		Suggest(meliId, ch, Download)
-	}
-
-}
-func Benchmark70Workers(b *testing.B) {
-	workers := 70
-	ch := startWorkers(workers)
-	for i := 0; i < b.N; i++ {
-		Suggest(meliId, ch, Download)
-	}
-
-}
-func Benchmark100Workers(b *testing.B) {
-	workers := 100
-	ch := startWorkers(workers)
-	for i := 0; i < b.N; i++ {
-		Suggest(meliId, ch, Download)
-	}
-
-}
-func Benchmark200Workers(b *testing.B) {
-	workers := 200
-	ch := startWorkers(workers)
-	for i := 0; i < b.N; i++ {
-		Suggest(meliId, ch, Download)
-	}
-
-}
-func Benchmark500Workers(b *testing.B) {
-	workers := 500
-	ch := startWorkers(workers)
-	for i := 0; i < b.N; i++ {
-		Suggest(meliId, ch, Download)
-	}
-
-}
-func Benchmark1000Workers(b *testing.B) {
-	workers := 1000
-	ch := startWorkers(workers)
-	for i := 0; i < b.N; i++ {
-		Suggest(meliId, ch, Download)
-	}
-
-}
-func Benchmark2000Workers(b *testing.B) {
-	workers := 2000
-	ch := startWorkers(workers)
-	for i := 0; i < b.N; i++ {
-		Suggest(meliId, ch, Download)
-	}
-
-}
 func shuffle(slice []int) []int {
 	source := rand.NewSource(time.Now().UnixNano())
 	random := rand.New(source)
@@ -133,19 +20,27 @@ func shuffle(slice []int) []int {
 }
 func TestWithOnes(t *testing.T) {
 	ch := startWorkers(1000)
-	fmt.Println(Suggest("23123", ch, GenerarUnos))
+	fmt.Println(Suggest("23123", ch, func(s string) map[string]interface{} { return GenerarUnos(400000.0) }))
 }
-
-func GenerarUnos(category string) map[string]interface{} {
+func GenerarUnos(total float64) map[string]interface{} {
+	prices := make([]float64, 200)
+	sold := make([]float64, 200)
+	for i := range prices {
+		prices[i] = 1
+		sold[i] = 0
+	}
+	return
+}
+func Generar(total float64, prices [200]float64, sold [200]float64) map[string]interface{} {
 	maa := make(map[string]interface{})
 	paging := make(map[string]interface{})
-	paging["total"] = 400000.0
+	paging["total"] = total
 	limit := 200
 	results := make([]interface{}, limit)
 	for i := 0; i < limit; i++ {
 		results[i] = make(map[string]interface{})
-		results[i].(map[string]interface{})["price"] = 1.0
-		results[i].(map[string]interface{})["sold_quantity"] = 0.0
+		results[i].(map[string]interface{})["price"] = prices[i]
+		results[i].(map[string]interface{})["sold_quantity"] = sold[i]
 	}
 	maa["paging"] = paging
 	maa["results"] = results
