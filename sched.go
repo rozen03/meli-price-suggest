@@ -1,6 +1,7 @@
 package main
 
 import "time"
+import "fmt"
 
 type ArgsAndResult struct {
 	res      chan obtainedData
@@ -24,7 +25,9 @@ func taskWorker(ch chan ArgsAndResult, workerId int) {
 		case resi := <-ch:
 			GetObtainedData(resi.args, resi.res, resi.download)
 		default:
+			fmt.Println("soy", workerId, "y estoy al pedo")
 			time.Sleep(time.Second / 2)
+
 		}
 	}
 }
