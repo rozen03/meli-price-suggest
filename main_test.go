@@ -10,7 +10,7 @@ const limit = 200
 
 func TestWithOnes0Sold(t *testing.T) {
 	ch := startWorkers(1000)
-	res := Suggest("23123", ch, func(s string) map[string]interface{} { return GenerarUnos(400000.0) })
+	res := Suggest("23123", ch, func(s string) map[string]interface{} { return GenerarUnos(4000.0, 0) })
 
 	if res.max != 1.0 {
 		t.Error("Max should be 1 got", res.max)
@@ -22,12 +22,12 @@ func TestWithOnes0Sold(t *testing.T) {
 		t.Error("Suggested should be 1 got", res.suggested)
 	}
 }
-func GenerarUnos(total float64) map[string]interface{} {
+func GenerarUnos(total float64, soldCount float64) map[string]interface{} {
 	var prices [200]float64
 	var sold [200]float64
 	for i := range prices {
 		prices[i] = 1
-		sold[i] = 0
+		sold[i] = soldCount
 	}
 	return Generar(total, prices, sold)
 }
