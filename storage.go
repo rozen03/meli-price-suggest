@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"math"
 	"net/http"
 	"strconv"
@@ -88,8 +89,9 @@ func GetObtainedData(args string, c chan obtainedData, download Downloader) {
 	results, ok := body["results"].([]interface{})
 	if !ok {
 		c <- obtainedData{0.0, 0.0, 0.0, 0.0}
+		fmt.Println("Dio Feito :O")
 	}
-	c <- GetPricesAndSold(results)
+	go func() { c <- GetPricesAndSold(results) }()
 }
 
 /*
