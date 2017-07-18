@@ -35,7 +35,7 @@ func Download(args string) map[string]interface{} {
 			failed++
 			continue
 		}
-
+		defer resp.Body.Close()
 		err = json.NewDecoder(resp.Body).Decode(&body)
 		if err != nil {
 			failed++
@@ -43,7 +43,7 @@ func Download(args string) map[string]interface{} {
 		}
 		//Decode response ioreader into map[string]interface{}
 		//decode to any struct would likely cause errors
-		defer resp.Body.Close()
+		break
 	}
 	if err != nil {
 		panic(err)
