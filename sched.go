@@ -21,6 +21,8 @@ func taskWorker(ch chan ArgsAndResult, morir chan bool, workerId int) {
 		select {
 		case resi := <-ch:
 			GetObtainedData(resi.args, resi.res, resi.download)
+		case _ = <-morir:
+			return
 		default:
 			// time.Sleep(time.Second / 2)
 		}
