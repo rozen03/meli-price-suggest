@@ -1,7 +1,5 @@
 package main
 
-import "time"
-
 type ArgsAndResult struct {
 	res      chan obtainedData
 	args     string
@@ -18,21 +16,26 @@ const maxChanelsSched = 60
 **
  */
 
-func taskWorker(ch chan ArgsAndResult, workerId int) {
+func taskWorker(ch chan ArgsAndResult, morir chan bool, workerId int) {
 	for true {
 		select {
 		case resi := <-ch:
 			GetObtainedData(resi.args, resi.res, resi.download)
 		default:
-			time.Sleep(time.Second / 2)
+			// time.Sleep(time.Second / 2)
 		}
 	}
 }
-
-func startWorkers(workers int) chan ArgsAndResult {
-	ch := make(chan ArgsAndResult)
+func matar(morir chan bool, workers int) {
 	for i := 0; i < workers; i++ {
-		go taskWorker(ch, i)
+		morir <- true
 	}
-	return ch
+}
+func startWorkers(workers int) (chan ArgsAndResult, chan bool) {
+	ch := make(chan ArgsAndResult)
+	morir := make(chan bool)
+	for i := 0; i < workers; i++ {
+		go taskWorker(ch, morir, i)
+	}
+	return ch, morir
 }

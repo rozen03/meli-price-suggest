@@ -51,58 +51,76 @@ func BenchmarkShuffle(b *testing.B) {
 // }
 // }
 func Benchmark40Workers(b *testing.B) {
-	ch := startWorkers(40)
+	workers := 40
+	ch, morir := startWorkers(workers)
 	for i := 0; i < b.N; i++ {
 		Suggest(meliId, ch, Download)
 	}
+	matar(morir, workers)
 }
 func Benchmark50Workers(b *testing.B) {
-	ch := startWorkers(50)
+	workers := 50
+	ch, morir := startWorkers(workers)
 	for i := 0; i < b.N; i++ {
 		Suggest(meliId, ch, Download)
 	}
+	matar(morir, workers)
 }
 func Benchmark60Workers(b *testing.B) {
-	ch := startWorkers(60)
+	workers := 60
+	ch, morir := startWorkers(workers)
 	for i := 0; i < b.N; i++ {
 		Suggest(meliId, ch, Download)
 	}
+	matar(morir, workers)
 }
 func Benchmark70Workers(b *testing.B) {
-	ch := startWorkers(70)
+	workers := 70
+	ch, morir := startWorkers(workers)
 	for i := 0; i < b.N; i++ {
 		Suggest(meliId, ch, Download)
 	}
+	matar(morir, workers)
 }
 func Benchmark100Workers(b *testing.B) {
-	ch := startWorkers(100)
+	workers := 100
+	ch, morir := startWorkers(workers)
 	for i := 0; i < b.N; i++ {
 		Suggest(meliId, ch, Download)
 	}
+	matar(morir, workers)
 }
 func Benchmark200Workers(b *testing.B) {
-	ch := startWorkers(200)
+	workers := 200
+	ch, morir := startWorkers(workers)
 	for i := 0; i < b.N; i++ {
 		Suggest(meliId, ch, Download)
 	}
+	matar(morir, workers)
 }
 func Benchmark500Workers(b *testing.B) {
-	ch := startWorkers(500)
+	workers := 500
+	ch, morir := startWorkers(workers)
 	for i := 0; i < b.N; i++ {
 		Suggest(meliId, ch, Download)
 	}
+	matar(morir, workers)
 }
 func Benchmark1000Workers(b *testing.B) {
-	ch := startWorkers(1000)
+	workers := 1000
+	ch, morir := startWorkers(workers)
 	for i := 0; i < b.N; i++ {
 		Suggest(meliId, ch, Download)
 	}
+	matar(morir, workers)
 }
 func Benchmark2000Workers(b *testing.B) {
-	ch := startWorkers(2000)
+	workers := 2000
+	ch, morir := startWorkers(workers)
 	for i := 0; i < b.N; i++ {
 		Suggest(meliId, ch, Download)
 	}
+	matar(morir, workers)
 }
 func shuffle(slice []int) []int {
 	source := rand.NewSource(time.Now().UnixNano())
@@ -114,9 +132,9 @@ func shuffle(slice []int) []int {
 	return slice
 }
 func TestWithOnes(t *testing.T) {
-	ch := startWorkers(1000)
+	ch, morir := startWorkers(1000)
 	fmt.Println(Suggest("23123", ch, GenerarUnos))
-
+	matar(morir, 1000)
 }
 
 func GenerarUnos(category string) map[string]interface{} {
