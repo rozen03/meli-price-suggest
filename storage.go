@@ -22,29 +22,32 @@ const melink = "https://api.mercadolibre.com/sites/MLA/search?limit=200&category
 **Returns map[string]interface{} parsing with the response from MeLi.
  */
 func Download(args string) map[string]interface{} {
-	//Download the json object from MeLi
-	resp, err := http.Get(melink + args)
-	if err != nil {
-		//Retry 10 times if error
-		for i := 0; i < 100 && err != nil; i++ {
-			// fmt.Println(err)
-			resp, err = http.Get(melink + args)
-			// time.Sleep(time.Millisecond * 500)
-		}
-		if err != nil {
-			panic(err)
-		}
-	}
-	defer resp.Body.Close()
 
-	//Decode response ioreader into map[string]interface{}
-	//decode to any struct would likely cause errors
+	var resp *http.Response
+	var err error
 	var body map[string]interface{}
-	err = json.NewDecoder(resp.Body).Decode(&body)
+	//Download the json object from MeLi
+	//Retry 100 times if error
+	failed := 0
+	for failed < 100 {
+		resp, err = http.Get(melink + args)
+		if err != nil {
+			failed++
+			continue
+		}
+
+		err = json.NewDecoder(resp.Body).Decode(&body)
+		if err != nil {
+			failed++
+			continue
+		}
+		//Decode response ioreader into map[string]interface{}
+		//decode to any struct would likely cause errors
+		defer resp.Body.Close()
+	}
 	if err != nil {
 		panic(err)
 	}
-
 	return body
 }
 
