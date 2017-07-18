@@ -31,24 +31,25 @@ func BenchmarkShuffle(b *testing.B) {
 	}
 }
 
-func Benchmark10Workers(b *testing.B) {
-	ch := startWorkers(10)
-	for i := 0; i < b.N; i++ {
-		Suggest(meliId, ch, Download)
-	}
-}
-func Benchmark20Workers(b *testing.B) {
-	ch := startWorkers(20)
-	for i := 0; i < b.N; i++ {
-		Suggest(meliId, ch, Download)
-	}
-}
-func Benchmark30Workers(b *testing.B) {
-	ch := startWorkers(30)
-	for i := 0; i < b.N; i++ {
-		Suggest(meliId, ch, Download)
-	}
-}
+//
+// func Benchmark10Workers(b *testing.B) {
+// ch := startWorkers(10)
+// for i := 0; i < b.N; i++ {
+// Suggest(meliId, ch, Download)
+// }
+// }
+// func Benchmark20Workers(b *testing.B) {
+// ch := startWorkers(20)
+// for i := 0; i < b.N; i++ {
+// Suggest(meliId, ch, Download)
+// }
+// }
+// func Benchmark30Workers(b *testing.B) {
+// ch := startWorkers(30)
+// for i := 0; i < b.N; i++ {
+// Suggest(meliId, ch, Download)
+// }
+// }
 func Benchmark40Workers(b *testing.B) {
 	ch := startWorkers(40)
 	for i := 0; i < b.N; i++ {
