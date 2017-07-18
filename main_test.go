@@ -23,13 +23,13 @@ func TestWithOnes(t *testing.T) {
 	fmt.Println(Suggest("23123", ch, func(s string) map[string]interface{} { return GenerarUnos(400000.0) }))
 }
 func GenerarUnos(total float64) map[string]interface{} {
-	prices := make([]float64, 200)
-	sold := make([]float64, 200)
+	var prices [200]float64
+	var sold [200]float64
 	for i := range prices {
 		prices[i] = 1
 		sold[i] = 0
 	}
-	return
+	return Generar(total, prices, sold)
 }
 func Generar(total float64, prices [200]float64, sold [200]float64) map[string]interface{} {
 	maa := make(map[string]interface{})
