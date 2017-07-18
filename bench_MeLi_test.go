@@ -125,5 +125,11 @@ func Benchmark4000Workers(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		Suggest(meliId, ch, Download)
 	}
-
+}
+func Benchmark8000Workers(b *testing.B) {
+	workers := 8000
+	ch := startWorkers(workers)
+	for i := 0; i < b.N; i++ {
+		Suggest(meliId, ch, Download)
+	}
 }
