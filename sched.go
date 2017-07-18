@@ -1,7 +1,9 @@
 package main
 
-import "time"
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
 
 type ArgsAndResult struct {
 	res      chan obtainedData
@@ -20,14 +22,21 @@ const maxChanelsSched = 64
  */
 
 func taskWorker(ch chan ArgsAndResult, workerId int) {
+	alpedo := 0
+	tiempos := 0
 	for true {
 		select {
 		case resi := <-ch:
 			GetObtainedData(resi.args, resi.res, resi.download)
 		default:
-			fmt.Println("soy", workerId, "y estoy al pedo")
+			alpedo++
 			time.Sleep(time.Second / 2)
-
+		}
+		tiempos++
+		if tiempos > 60 {
+			fmt.Println("soy", workerId, "y estuve al pedo", alpedo, "veces")
+			tiempos = 0
+			alpedo = 0
 		}
 	}
 }
