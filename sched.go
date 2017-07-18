@@ -1,9 +1,6 @@
 package main
 
-import (
-	"fmt"
-	"time"
-)
+import "fmt"
 
 type ArgsAndResult struct {
 	res      chan obtainedData
@@ -30,7 +27,7 @@ func taskWorker(ch chan ArgsAndResult, workerId int) {
 			GetObtainedData(resi.args, resi.res, resi.download)
 		default:
 			alpedo++
-			time.Sleep(time.Second / 2)
+			// time.Sleep(time.Second / 2)
 		}
 		tiempos++
 		if tiempos > 60 {
