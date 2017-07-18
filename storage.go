@@ -123,7 +123,7 @@ func PreciosYVentas(category string, ch chan ArgsAndResult, download Downloader)
 	//Start a Goroutine that would send in order all downloads waiting for any
 	//Task worker free to download
 	go func() {
-		for c := 0; c < chanels; c += 4 {
+		for c := 0; c < chanels; c += 6 {
 			ch <- ArgsAndResult{responses1, category + "&offset=" + strconv.Itoa(200*(c+1)), download}
 			ch <- ArgsAndResult{responses2, category + "&offset=" + strconv.Itoa(200*(c+2)), download}
 			ch <- ArgsAndResult{responses3, category + "&offset=" + strconv.Itoa(200*(c+3)), download}
