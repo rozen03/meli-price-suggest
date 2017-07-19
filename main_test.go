@@ -63,16 +63,18 @@ func GenerateSameTest(t *testing.T, total float64, price float64, sold float64) 
 	}
 }
 
-const TOLERANCE = 0.001
+const TOLERANCE = 0.0001
 
 func GenerateMiddleTest(t *testing.T, hasta float64, sold float64) {
 	ch := startWorkers(1000)
 	res := Suggest("23123", ch, GeneradorDelMedio(hasta, sold))
 
-	if diff := math.Abs(res.max - hasta); diff < TOLERANCE {
+	// if diff := math.Abs(res.max - hasta); diff < TOLERANCE {
+	if res.max != hasta {
 		t.Error("Max should be", hasta, "got", res.max)
 	}
-	if diff := math.Abs(res.min - 1); diff < TOLERANCE {
+	// if diff := math.Abs(res.min - 1); diff < TOLERANCE {
+	if res.min != 1 {
 		t.Error("Min should be ", 1, " got", res.min)
 	}
 	if diff := math.Abs(res.suggested - hasta/2 + 0.5); diff < TOLERANCE {
