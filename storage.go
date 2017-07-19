@@ -115,30 +115,27 @@ func GetTotalCount(body *map[string]interface{}) int {
 **returns the total count, the minimum, the maximum, the sum of all prices
  */
 func PreciosYVentas(category string, ch chan ArgsAndResult, download Downloader) obtainedData {
+	//Downloads first set of 200 items and total count
 	body := download(category)
 	results := body["results"].([]interface{})
 	total := GetTotalCount(&body)
 	res := GetPricesAndSold(results)
 	chanels := (total / 200) - 1
-	// channs := make(map[int]chan obtainedData)
-	responses1 := make(chan obtainedData)
+	responses := make(chan obtainedData)
 	//Start a Goroutine that would send in order all downloads waiting for any
 	//Task worker free to download
 	go func() {
 		for c := 0; c < chanels; c++ {
-			ch <- ArgsAndResult{responses1, category + "&offset=" + strconv.Itoa(200*(c+1)), download}
+			ch <- ArgsAndResult{responses, category + "&offset=" + strconv.Itoa(200*(c+1)), download}
 		}
 	}()
-
 	/*
 	**Wait for all channels to return and merge the prices information
 	**then delete the channel key in the map to reduce the ammount of iterations
 	 */
-	//TODO: Evaluate if it would be better to set a sleeping time
-	//before starting to loop again
 	done := 0
 	for done < chanels {
-		res_i := <-responses1
+		res_i := <-responses
 		MergeObainedData(&res, &res_i)
 		done++
 

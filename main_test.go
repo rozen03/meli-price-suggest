@@ -12,30 +12,35 @@ import
 const limit = 200
 
 func TestWithOnes(t *testing.T) {
+	t.Parallel()
 	GenerateSameTest(t, 4000.0, 1, 0)
 	GenerateSameTest(t, 4000.0, 1, 50)
 	GenerateSameTest(t, 4000.0, 1, 200)
 	GenerateSameTest(t, 4000.0, 1, 1000)
 }
 func TestWith50(t *testing.T) {
+	t.Parallel()
 	GenerateSameTest(t, 4000.0, 50, 0)
 	GenerateSameTest(t, 4000.0, 50, 50)
 	GenerateSameTest(t, 4000.0, 50, 200)
 	GenerateSameTest(t, 4000.0, 50, 1000)
 }
 func TestWith100(t *testing.T) {
+	t.Parallel()
 	GenerateSameTest(t, 4000.0, 100, 0)
 	GenerateSameTest(t, 4000.0, 100, 50)
 	GenerateSameTest(t, 4000.0, 100, 200)
 	GenerateSameTest(t, 4000.0, 100, 1000)
 }
 func TestMiddleTo100(t *testing.T) {
+	t.Parallel()
 	GenerateMiddleTest(t, 100, 0)
 	GenerateMiddleTest(t, 100, 50)
 	GenerateMiddleTest(t, 100, 200)
 	GenerateMiddleTest(t, 100, 1000)
 }
 func TestMiddleTo1k(t *testing.T) {
+	t.Parallel()
 	GenerateMiddleTest(t, 1000, 0)
 	GenerateMiddleTest(t, 1000, 50)
 	GenerateMiddleTest(t, 1000, 200)
@@ -49,6 +54,7 @@ func TestMiddleTo1k(t *testing.T) {
 // GenerateMiddleTest(t, 1000000, 1000)
 // }
 func TestCreciente(t *testing.T) {
+	t.Parallel()
 	GenerateIncreasingTest(t, 50)
 	GenerateIncreasingTest(t, 100)
 	GenerateIncreasingTest(t, 500)
@@ -56,6 +62,7 @@ func TestCreciente(t *testing.T) {
 }
 
 func TestDecreciente(t *testing.T) {
+	t.Parallel()
 	GenerateDecreasingTest(t, 50)
 	GenerateDecreasingTest(t, 100)
 	GenerateDecreasingTest(t, 500)
