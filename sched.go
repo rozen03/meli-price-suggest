@@ -3,9 +3,9 @@ package main
 import "time"
 
 type ArgsAndResult struct {
-	res      chan obtainedData
-	args     string
-	download Downloader
+	res  chan obtainedData
+	args string
+	get  httpInterface
 }
 
 const maxChanelsSched = 64
@@ -22,7 +22,7 @@ func taskWorker(ch chan ArgsAndResult, workerId int) {
 	for true {
 		select {
 		case resi := <-ch:
-			GetObtainedData(resi.args, resi.res, resi.download)
+			GetObtainedData(resi.args, resi.res, resi.get)
 		default:
 			time.Sleep(time.Second / 10)
 		}
