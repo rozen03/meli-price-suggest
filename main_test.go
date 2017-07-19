@@ -3,33 +3,103 @@ package main
 import
 // "encoding/json"
 
-"testing"
+(
+	"math"
+	"testing"
+)
 
 // "reflect"
 const limit = 200
 
-func TestWithOnes0Sold(t *testing.T) {
+func TestWithOnes(t *testing.T) {
+	GenerateSameTest(t, 4000.0, 1, 0)
+	GenerateSameTest(t, 4000.0, 1, 50)
+	GenerateSameTest(t, 4000.0, 1, 200)
+	GenerateSameTest(t, 4000.0, 1, 1000)
+}
+func TestWith50(t *testing.T) {
+	GenerateSameTest(t, 4000.0, 50, 0)
+	GenerateSameTest(t, 4000.0, 50, 50)
+	GenerateSameTest(t, 4000.0, 50, 200)
+	GenerateSameTest(t, 4000.0, 50, 1000)
+}
+func TestWith100(t *testing.T) {
+	GenerateSameTest(t, 4000.0, 100, 0)
+	GenerateSameTest(t, 4000.0, 100, 50)
+	GenerateSameTest(t, 4000.0, 100, 200)
+	GenerateSameTest(t, 4000.0, 100, 1000)
+}
+func TestMiddleTo100(t *testing.T) {
+	GenerateMiddleTest(t, 100, 0)
+	GenerateMiddleTest(t, 100, 50)
+	GenerateMiddleTest(t, 100, 200)
+	GenerateMiddleTest(t, 100, 1000)
+}
+func TestMiddleTo1k(t *testing.T) {
+	GenerateMiddleTest(t, 1000, 0)
+	GenerateMiddleTest(t, 1000, 50)
+	GenerateMiddleTest(t, 1000, 200)
+	GenerateMiddleTest(t, 1000, 1000)
+}
+func TestMiddleTo1M(t *testing.T) {
+	GenerateMiddleTest(t, 1000000, 0)
+	GenerateMiddleTest(t, 1000000, 50)
+	GenerateMiddleTest(t, 1000000, 200)
+	GenerateMiddleTest(t, 1000000, 1000)
+}
+func GenerateSameTest(t *testing.T, total float64, price float64, sold float64) {
 	ch := startWorkers(1000)
-	res := Suggest("23123", ch, func(s string) map[string]interface{} { return GenerarUnos(4000.0, 0) })
+	res := Suggest("23123", ch, func(s string) map[string]interface{} { return GenerarMismo(total, price, sold) })
 
-	if res.max != 1.0 {
-		t.Error("Max should be 1 got", res.max)
+	if res.max != price {
+		t.Error("Max should be", price, "got", res.max)
 	}
-	if res.min != 1.0 {
-		t.Error("Min should be 1 got", res.min)
+	if res.min != price {
+		t.Error("Min should be ", price, " got", res.min)
 	}
-	if res.suggested != 1.0 {
-		t.Error("Suggested should be 1 got", res.suggested)
+	if res.suggested != price {
+		t.Error("Suggested should be ", price, " got", res.suggested)
 	}
 }
-func GenerarUnos(total float64, soldCount float64) map[string]interface{} {
+
+const TOLERANCE = 0.000001
+
+func GenerateMiddleTest(t *testing.T, hasta float64, sold float64) {
+	ch := startWorkers(1000)
+	res := Suggest("23123", ch, GeneradorDelMedio(hasta, sold))
+
+	if diff := math.Abs(res.max - hasta); diff < TOLERANCE {
+		t.Error("Max should be", hasta, "got", res.max)
+	}
+	if diff := math.Abs(res.min - 1); diff < TOLERANCE {
+		t.Error("Min should be ", 1, " got", res.min)
+	}
+	if diff := math.Abs(res.suggested - hasta/2 + 0.5); diff < TOLERANCE {
+		t.Error("Suggested should be ", hasta/2, " got", res.suggested)
+	}
+}
+func GenerarMismo(total float64, price float64, soldCount float64) map[string]interface{} {
 	var prices [200]float64
 	var sold [200]float64
 	for i := range prices {
-		prices[i] = 1
+		prices[i] = price
 		sold[i] = soldCount
 	}
 	return Generar(total, prices, sold)
+}
+func GeneradorDelMedio(hasta float64, soldCount float64) func(s string) map[string]interface{} {
+	total := (hasta) * 200
+	contador := 0.0
+	return func(s string) map[string]interface{} {
+		contador++
+		var prices [200]float64
+		var sold [200]float64
+		for i := range prices {
+			prices[i] = contador
+			sold[i] = soldCount
+		}
+		return Generar(total, prices, sold)
+	}
 }
 func GeneradorCreciente(hasta float64) func(s string) map[string]interface{} {
 	total := hasta * 200
@@ -39,8 +109,22 @@ func GeneradorCreciente(hasta float64) func(s string) map[string]interface{} {
 		var prices [200]float64
 		var sold [200]float64
 		for i := range prices {
-			prices[i] = 10 + contador
+			prices[i] = contador
 			sold[i] = contador
+		}
+		return Generar(total, prices, sold)
+	}
+}
+func GeneradorDecreciente(hasta float64) func(s string) map[string]interface{} {
+	total := hasta * 200
+	contador := -1.0
+	return func(s string) map[string]interface{} {
+		contador++
+		var prices [200]float64
+		var sold [200]float64
+		for i := range prices {
+			prices[i] = contador
+			sold[i] = hasta - contador
 		}
 		return Generar(total, prices, sold)
 	}

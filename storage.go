@@ -94,7 +94,12 @@ func GetObtainedData(args string, c chan obtainedData, download Downloader) {
 		c <- obtainedData{0.0, 0.0, 0.0, 0.0}
 		fmt.Println("Dio Feito :O")
 	}
-	go func() { c <- GetPricesAndSold(results) }()
+	go func() {
+		c <- GetPricesAndSold(results)
+		if err := recover(); err != nil {
+			c <- obtainedData{0.0, 0.0, 0.0, 0.0}
+		}
+	}()
 }
 
 /*
@@ -122,7 +127,6 @@ func PreciosYVentas(category string, ch chan ArgsAndResult, download Downloader)
 	//Start a Goroutine that would send in order all downloads waiting for any
 	//Task worker free to download
 	go func() {
-		// for c := 0; c < chanels; c += 40 {
 		for c := 0; c < chanels; c++ {
 			ch <- ArgsAndResult{responses1, category + "&offset=" + strconv.Itoa(200*(c+1)), download}
 		}
@@ -136,13 +140,9 @@ func PreciosYVentas(category string, ch chan ArgsAndResult, download Downloader)
 	//before starting to loop again
 	done := 0
 	for done < chanels {
-		select {
-		case resi := <-responses1:
-			MergeObainedData(&res, &resi)
-			done++
-		default:
-			continue
-		}
+		resi := <-responses1
+		MergeObainedData(&res, &resi)
+		done++
 
 	}
 	return res
