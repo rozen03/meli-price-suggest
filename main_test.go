@@ -48,6 +48,19 @@ func TestMiddleTo1k(t *testing.T) {
 // GenerateMiddleTest(t, 1000000, 200)
 // GenerateMiddleTest(t, 1000000, 1000)
 // }
+func TestCreciente(t *testing.T) {
+	GenerateIncreasingTest(t, 50)
+	GenerateIncreasingTest(t, 100)
+	GenerateIncreasingTest(t, 500)
+	GenerateIncreasingTest(t, 1000)
+}
+
+func TestDecreciente(t *testing.T) {
+	GenerateDecreasingTest(t, 50)
+	GenerateDecreasingTest(t, 100)
+	GenerateDecreasingTest(t, 500)
+	GenerateDecreasingTest(t, 1000)
+}
 func GenerateSameTest(t *testing.T, total float64, price float64, sold float64) {
 	ch := startWorkers(1000)
 	res := Suggest("23123", ch, func(s string) map[string]interface{} { return GenerarMismo(total, price, sold) })
@@ -63,22 +76,55 @@ func GenerateSameTest(t *testing.T, total float64, price float64, sold float64) 
 	}
 }
 
-const TOLERANCE = 0.0001
+const TOLERANCE = 0.00000001
 
 func GenerateMiddleTest(t *testing.T, hasta float64, sold float64) {
 	ch := startWorkers(1000)
 	res := Suggest("23123", ch, GeneradorDelMedio(hasta, sold))
 
-	// if diff := math.Abs(res.max - hasta); diff < TOLERANCE {
 	if res.max != hasta {
 		t.Error("Max should be", hasta, "got", res.max)
 	}
-	// if diff := math.Abs(res.min - 1); diff < TOLERANCE {
-	if res.min != 1 {
-		t.Error("Min should be ", 1, " got", res.min)
+	if res.min != 0 {
+		t.Error("Min should be ", 0, " got", res.min)
 	}
-	if diff := math.Abs(res.suggested - hasta/2 + 0.5); diff < TOLERANCE {
+	if diff := math.Abs(res.suggested - hasta/2); diff > TOLERANCE {
 		t.Error("Suggested should be ", hasta/2, " got", res.suggested)
+	}
+}
+func resIncreasing(hasta float64) float64 {
+	//it's not super precise but works fine for this
+	return (2 * (2*hasta + 1)) / 6 // = sum i*i for i in 0 to n)/(n*(n+1))/2
+
+}
+func resDecreasing(hasta float64) float64 {
+	//it's not super precise but works for this
+	return 2 * (hasta - 1) / 6 // = sum i*(n-i) for i in 0 to n)/(n*(n+1))/2
+}
+func GenerateIncreasingTest(t *testing.T, hasta float64) {
+	ch := startWorkers(1000)
+	res := Suggest("23123", ch, GeneradorCreciente(hasta))
+	if res.max != hasta {
+		t.Error("Max should be", hasta, "got", res.max)
+	}
+	if res.min != 0 {
+		t.Error("Min should be ", 0, " got", res.min)
+	}
+	if diff := math.Abs(res.suggested - resIncreasing(hasta)); diff > 1 {
+		t.Error("Suggested should be ", resIncreasing(hasta), " got", res.suggested)
+	}
+}
+func GenerateDecreasingTest(t *testing.T, hasta float64) {
+	ch := startWorkers(1000)
+	res := Suggest("23123", ch, GeneradorDecreciente(hasta))
+	if res.max != hasta {
+		t.Error("Max should be", hasta, "got", res.max)
+	}
+	if res.min != 0 {
+		t.Error("Min should be ", 0, " got", res.min)
+	}
+	if diff := math.Abs(res.suggested - resDecreasing(hasta)); diff > 1 {
+		t.Error("Suggested should be ", resDecreasing(hasta), " got", res.suggested)
 	}
 }
 func GenerarMismo(total float64, price float64, soldCount float64) map[string]interface{} {
@@ -91,8 +137,8 @@ func GenerarMismo(total float64, price float64, soldCount float64) map[string]in
 	return Generar(total, prices, sold)
 }
 func GeneradorDelMedio(hasta float64, soldCount float64) func(s string) map[string]interface{} {
-	total := (hasta) * 200
-	contador := 0.0
+	total := (hasta + 1) * 200
+	contador := -1.0
 	return func(s string) map[string]interface{} {
 		contador++
 		var prices [200]float64
@@ -105,8 +151,8 @@ func GeneradorDelMedio(hasta float64, soldCount float64) func(s string) map[stri
 	}
 }
 func GeneradorCreciente(hasta float64) func(s string) map[string]interface{} {
-	total := hasta * 200
-	contador := 0.0
+	total := (hasta + 1) * 200
+	contador := -1.0
 	return func(s string) map[string]interface{} {
 		contador++
 		var prices [200]float64
@@ -119,7 +165,7 @@ func GeneradorCreciente(hasta float64) func(s string) map[string]interface{} {
 	}
 }
 func GeneradorDecreciente(hasta float64) func(s string) map[string]interface{} {
-	total := hasta * 200
+	total := (hasta + 1) * 200
 	contador := -1.0
 	return func(s string) map[string]interface{} {
 		contador++
