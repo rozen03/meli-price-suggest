@@ -12,7 +12,6 @@ func Test001(t *testing.T) {
 	if testing.Short() {
 		t.Skip("skipping test in short mode.")
 	}
-
 }
 
 func BenchmarkXxx(b *testing.B) {

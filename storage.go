@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"math"
 	"net/http"
 	"strconv"
@@ -92,7 +91,6 @@ func GetObtainedData(args string, c chan obtainedData, download Downloader) {
 	results, ok := body["results"].([]interface{})
 	if !ok {
 		c <- obtainedData{0.0, 0.0, 0.0, 0.0}
-		fmt.Println("Dio Feito :O")
 	}
 	go func() {
 		c <- GetPricesAndSold(results)
@@ -140,8 +138,8 @@ func PreciosYVentas(category string, ch chan ArgsAndResult, download Downloader)
 	//before starting to loop again
 	done := 0
 	for done < chanels {
-		resi := <-responses1
-		MergeObainedData(&res, &resi)
+		res_i := <-responses1
+		MergeObainedData(&res, &res_i)
 		done++
 
 	}

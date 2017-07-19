@@ -15,9 +15,9 @@ func MinMaxAvgData(data obtainedData) Respuesta {
 **the max between it's max valures
 **the sum between the two total counts and prices
  */
-func MergeObainedData(res *obtainedData, resi *obtainedData) {
-	(*res).sum += (*resi).sum
-	(*res).total += (*resi).total
-	(*res).max = math.Max((*res).max, (*resi).max)
-	(*res).min = math.Min((*res).min, (*resi).min)
+func MergeObainedData(res *obtainedData, res_i *obtainedData) {
+	(*res).sum += (*res_i).sum
+	(*res).total += (*res_i).total
+	(*res).max = math.Max((*res).max, (*res_i).max)
+	(*res).min = math.Min((*res).min, (*res_i).min)
 }
