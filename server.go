@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"net/http"
 	"os"
 	"strconv"
@@ -23,6 +24,7 @@ func prices(c *gin.Context, ch chan ArgsAndResult) {
 		"suggested": strconv.FormatFloat(res.suggested, 'f', 2, 64),
 		"min":       strconv.FormatFloat(res.min, 'f', 2, 64),
 	})
+
 }
 func GetMeli(args string) (*http.Response, error) { return http.Get(melink + args) }
 
@@ -39,6 +41,10 @@ func start() {
 	} else {
 		ch = startWorkers(maxChanelsSched)
 	}
+	// r := gin.Default()
+	myfile, _ := os.Create("gin.log")
+	gin.DefaultWriter = io.MultiWriter(myfile, os.Stdout)
+
 	r := gin.Default()
 	// r.GET("/ping", ping)
 	r.GET("/categories/:id/prices", func(c *gin.Context) { prices(c, ch) })

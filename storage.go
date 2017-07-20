@@ -42,7 +42,6 @@ func Download(args string, get httpInterface) (map[string]interface{}, error) {
 		//decode to any struct would likely cause errors
 		break
 	}
-	// fmt.Println(body)
 	if err != nil {
 		return nil, err
 	}
