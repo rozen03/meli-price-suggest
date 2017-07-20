@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
+	"os"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -25,7 +27,18 @@ func prices(c *gin.Context, ch chan ArgsAndResult) {
 func GetMeli(args string) (*http.Response, error) { return http.Get(melink + args) }
 
 func start() {
-	ch := startWorkers(maxChanelsSched)
+	var ch chan ArgsAndResult
+	if len(os.Args) > 0 {
+		fmt.Println(os.Args[1])
+		workers, err := strconv.Atoi(os.Args[1])
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		ch = startWorkers(workers)
+	} else {
+		ch = startWorkers(maxChanelsSched)
+	}
 	r := gin.Default()
 	// r.GET("/ping", ping)
 	r.GET("/categories/:id/prices", func(c *gin.Context) { prices(c, ch) })
