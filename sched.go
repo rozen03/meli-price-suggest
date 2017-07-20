@@ -1,7 +1,5 @@
 package main
 
-import "time"
-
 type ArgsAndResult struct {
 	res  chan obtainedData
 	args string
@@ -20,12 +18,8 @@ const maxChanelsSched = 100
 
 func taskWorker(ch chan ArgsAndResult, workerId int) {
 	for true {
-		select {
-		case resi := <-ch:
-			GetObtainedData(resi.args, resi.res, resi.get)
-		default:
-			time.Sleep(time.Second / 10)
-		}
+		job := <-ch
+		GetObtainedData(job.args, job.res, job.get)
 	}
 }
 
