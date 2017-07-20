@@ -8,7 +8,7 @@ type ArgsAndResult struct {
 	get  httpInterface
 }
 
-const maxChanelsSched = 8000
+const maxChanelsSched = 100
 
 /*
 **A Task Worker is a Goroutine that is listening to a channel waiting for
