@@ -4,8 +4,8 @@ import (
 	"testing"
 )
 
-func Benchmark1000Workers2Requests(b *testing.B) {
-	workers := 1000
+func Benchmark500Workers2Requests(b *testing.B) {
+	workers := 500
 	ch := startWorkers(workers)
 	res1 := make(chan Respuesta)
 	res2 := make(chan Respuesta)
@@ -27,8 +27,8 @@ func Benchmark1000Workers2Requests(b *testing.B) {
 		}
 	}
 }
-func Benchmark1000Workers5Requests(b *testing.B) {
-	workers := 1000
+func Benchmark500Workers5Requests(b *testing.B) {
+	workers := 500
 	ch := startWorkers(workers)
 	res1 := make(chan Respuesta)
 	res2 := make(chan Respuesta)
@@ -54,8 +54,8 @@ func Benchmark1000Workers5Requests(b *testing.B) {
 		}
 	}
 }
-func Benchmark1000Workers10Requests(b *testing.B) {
-	workers := 1000
+func Benchmark500Workers10Requests(b *testing.B) {
+	workers := 500
 	ch := startWorkers(workers)
 	res1 := make(chan Respuesta)
 	res2 := make(chan Respuesta)
@@ -95,8 +95,8 @@ func Benchmark1000Workers10Requests(b *testing.B) {
 		}
 	}
 }
-func Benchmark1000Workers20Requests(b *testing.B) {
-	workers := 1000
+func Benchmark500Workers20Requests(b *testing.B) {
+	workers := 500
 	ch := startWorkers(workers)
 	res1 := make(chan Respuesta)
 	res2 := make(chan Respuesta)
