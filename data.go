@@ -7,7 +7,6 @@ type Respuesta struct {
 	suggested float64 `json:suggested`
 	min       float64 `json:min`
 }
-type Downloader func(category string) map[string]interface{}
 type httpInterface func(category string) (*http.Response, error)
 
 /*
