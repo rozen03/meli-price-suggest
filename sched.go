@@ -23,6 +23,11 @@ func taskWorker(ch chan ArgsAndResult, workerId int) {
 	}
 }
 
+/*
+**Initialize the Task Workers and returns the channel from where
+**the workers will listen
+**
+ */
 func startWorkers(workers int) chan ArgsAndResult {
 	ch := make(chan ArgsAndResult)
 	for i := 0; i < workers; i++ {
