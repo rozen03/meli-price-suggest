@@ -12,7 +12,7 @@ const maxChanelsSched = 100
 **A Task Worker is a Goroutine that is listening to a channel waiting for
 **a new task to do, in this case the Task would be to download, canculate
 **and send to the thread creator of the channel
-**the minimum, maximum, total count and the sum of all proces
+**the minimum, maximum, total count and the sum of all prices
 **
  */
 
