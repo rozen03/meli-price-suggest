@@ -33,13 +33,14 @@ func Download(args string, get httpInterface) (map[string]interface{}, error) {
 			continue
 		}
 		defer resp.Body.Close()
+		//Decode response ioreader into map[string]interface{}
+		//decode to any struct would likely cause errors
 		err = json.NewDecoder(resp.Body).Decode(&body)
 		if err != nil {
 			failed++
 			continue
 		}
-		//Decode response ioreader into map[string]interface{}
-		//decode to any struct would likely cause errors
+
 		break
 	}
 	if err != nil {
